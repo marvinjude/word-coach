@@ -12,14 +12,14 @@ We have usage examples on CodeSandbox:
 
 VueJS:
 
-```sh
-yarn add @marvinjude/word-coach-react
+```bash
+yarn add @marvinjudehk/word-coach-react
 ```
 
 React:
 
-```sh
-yarn add @marvinjude/word-coach-vue
+```bash
+yarn add @marvinjudehk/word-coach-vue
 ```
 
 ## Framework specific docs
