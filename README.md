@@ -8,8 +8,21 @@ We have usage examples on CodeSandbox:
 + [React](https://codesandbox.com/iiheu3hg7e83)
 + [VueJs](https://codesandbox.com/iiheu3hg7e8ri3ieh3)
 
+## Installation
+
+VueJS:
+
+```sh
+yarn add @marvinjude/word-coach-react
+```
+
+React:
+
+```sh
+yarn add @marvinjude/word-coach-vue
+```
+
 ## Framework specific docs
-We've written Word Coach in React and other frontend libraries, for installation and each see the below:
 
 - [React](https://github.com/marvinjude/word-coach/packages/word-coach-react)
 - [VueJs](https://github.com/marvinjude/word-coach/packages/word-coach-vue)
