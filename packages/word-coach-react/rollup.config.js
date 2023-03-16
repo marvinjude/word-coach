@@ -1,29 +1,33 @@
-const babel = require("rollup-plugin-babel")
-const commonjs = require("rollup-plugin-commonjs")
-const resolve = require("rollup-plugin-node-resolve")
-const external = require("rollup-plugin-peer-deps-external")
+const babel = require("@rollup/plugin-babel")
+const commonjs = require("@rollup/plugin-commonjs")
+const resolve = require("@rollup/plugin-node-resolve")
+const { terser } = require("@rollup/plugin-terser")
+const peerDepsExternal = require("rollup-plugin-peer-deps-external")
 const postcss = require("rollup-plugin-postcss")
-const { terser } = require("rollup-plugin-terser")
-// const typescript = require("@rollup/plugin-typescript")
+const postcssPresetEnv = require("postcss-preset-env")
 
 module.exports = {
   input: "./src/index.js",
-  external: ["react", "styled-components", "lodash.shuffle"],
+  external: ["react", "styled-components", "lodash.shuffle", "framer-motion"],
   plugins: [
-    // typescript(),
-    external(),
-    // eslint({
-    //   throwOnError: false,
-    // }),
-    babel({
-      exclude: "node_modules/**",
-    }),
-    resolve(),
-    commonjs(),
     postcss({
       modules: true,
-      plugins: [],
+      plugins: [
+        postcssPresetEnv({
+          browsers: ["> 0.2% and not dead"],
+        }),
+      ],
     }),
+    peerDepsExternal(),
+    commonjs({
+      include: "node_modules/**",
+    }),
+    resolve(),
+    babel({
+      exclude: "node_modules/**",
+      babelHelpers: "bundled",
+    }),
+
     process.env.NODE_ENV === "production" && terser(),
   ],
   output: [

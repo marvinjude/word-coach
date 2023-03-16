@@ -1,22 +1,13 @@
 {
+  "name": "word-coach",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/word-coach-react/**",
-      "**/word-coach-vue/**"
-    ]
-  },
   "scripts": {
-    "dev:vue": "rollup -c packages/word-coach-vue/rollup.config.js -w",
-    "dev:react": "yarn workspace word-coach-react dev",
-    "link:vue": "yarn workspace word-coach-vue link",
-    "link:react": "yarn workspace word-coach-react link"
+    "watch": "lerna run watch --no-sort --stream --concurrency 999",
+    "build": "lerna run build --no-sort --stream --concurrency 999",
+    "clean:node_modules": "lerna clean --yes",
+    "clean:dist": "lerna run clean"
   },
   "devDependencies": {
     "lerna": "^6.5.1"
-  },
-  "name": "word-coach"
+  }
 }

@@ -1,0 +1,12 @@
+{
+  "name": "word-coach-common",
+  "version": "1.0.0",
+  "description": "",
+  "exports": {
+    "./styles.module.css": "./src/styles.module.css"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

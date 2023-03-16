@@ -15,6 +15,10 @@ import callbackCaller from "./utils/callbackCaller"
 import { DEFAULT_THEME } from "./constants"
 import { isDev } from "./utils/isDev"
 
+import thing from "word-coach-common/styles.module.css"
+
+console.log(thing)
+
 function WordCoach({
   theme,
   defaultScore,
