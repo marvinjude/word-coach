@@ -15,9 +15,9 @@ import callbackCaller from "./utils/callbackCaller"
 import { DEFAULT_THEME } from "./constants"
 import { isDev } from "./utils/isDev"
 
-import thing from "word-coach-common/styles.module.css"
+import { header } from "word-coach-common/styles"
 
-console.log(thing)
+console.log({ container, mulipleStyles })
 
 function WordCoach({
   theme,
@@ -150,7 +150,7 @@ function WordCoach({
             exit={{ opacity: 0 }}
             style={{ padding: "1.2rem" }}
           >
-            <StyledHeader>
+            <StyledHeader className={header}>
               <span>WORD COACH </span>
               <Score score={score} />
             </StyledHeader>
