@@ -1,4 +1,4 @@
-.card{
+.card {
   font-size: clamp(1rem, 2.5vw, 2rem);
   break-inside: avoid;
   break-before: avoid-column;

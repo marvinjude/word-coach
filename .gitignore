@@ -90,6 +90,7 @@ typings/
 .DS_Store
 
 # Yarn
+yarn.lock
 yarn-error.log
 .pnp/
 .pnp.js
