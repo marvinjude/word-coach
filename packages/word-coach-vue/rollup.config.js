@@ -1,11 +1,10 @@
 const vue = require("rollup-plugin-vue")
-const buble = require("@rollup/plugin-buble")
-const path = require("path")
+const babel = require("@rollup/plugin-babel")
 const postcss = require("rollup-plugin-postcss")
 const postcssPresetEnv = require("postcss-preset-env")
 
 module.exports = {
-  input: "./src/index.vue",
+  input: "./src/index.jsx",
   plugins: [
     vue(),
     postcss({
@@ -16,7 +15,10 @@ module.exports = {
         }),
       ],
     }),
-    buble(),
+    babel({
+      plugins: ["@vue/babel-plugin-jsx"],
+      babelHelpers: "bundled",
+    }),
   ],
   external: ["vue"],
   output: [
