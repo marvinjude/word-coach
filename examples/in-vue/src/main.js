@@ -1,10 +1,8 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import WordCoach from "word-coach-vue";
-import './assets/index.css'
+import { createApp } from "vue"
+import App from "./App.jsx"
 
-const app = createApp(App);
+import "./assets/index.css"
 
-app.component("word-coach", WordCoach);
+const app = createApp(App)
 
-app.mount("#app");
+app.mount("#app")
