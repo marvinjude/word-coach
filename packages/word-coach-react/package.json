@@ -1,5 +1,6 @@
 {
   "name": "word-coach-react",
+  "type": "module",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -30,11 +31,11 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "classnames": "^2.3.2",
     "framer-motion": "^5.4.5",
     "lodash.shuffle": "^4.2.0",
     "prop-types": "^15.7.2",
     "react-animate-on-change": "^2.2.0",
-    "styled-components": "^5.0.1",
     "word-coach-common": "workspace:*"
   },
   "peerDependencies": {

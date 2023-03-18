@@ -1,9 +1,9 @@
-const vue = require("rollup-plugin-vue")
-const babel = require("@rollup/plugin-babel")
-const postcss = require("rollup-plugin-postcss")
-const postcssPresetEnv = require("postcss-preset-env")
+import vue from "rollup-plugin-vue"
+import babel from "@rollup/plugin-babel"
+import postcss from "rollup-plugin-postcss"
+import postcssPresetEnv from "postcss-preset-env"
 
-module.exports = {
+export default {
   input: "./src/index.jsx",
   plugins: [
     vue(),
@@ -23,13 +23,13 @@ module.exports = {
   external: ["vue"],
   output: [
     {
-      file: __dirname + "/dist/index.es.js",
+      file: "./dist/index.es.js",
       format: "es",
       sourcemap: true,
       exports: "named",
     },
     {
-      file: __dirname + "/dist/index.js",
+      file: "./dist/index.js",
       format: "cjs",
       sourcemap: true,
       exports: "named",

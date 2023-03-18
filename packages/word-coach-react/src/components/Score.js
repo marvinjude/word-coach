@@ -1,31 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion"
 import React from "react"
-import styled from "styled-components"
-
-const StyledScore = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
-
-  .score-value {
-    font-family: "JetBrains Mono";
-    color: ${props => props.theme.colors.highlighter.right};
-  }
-
-  .dot {
-    margin-left: 2px;
-    margin-right: 2px;
-  }
-`
+import styles from "word-coach-common/styles/styles.css"
 
 function Score({ score }) {
   return (
-    <StyledScore>
-      Score<span className="dot">•</span>
+    <div className={styles.score}>
+      Score<span className={styles.dot}>•</span>
       <AnimatePresence key={score}>
         <motion.span
-          className="score-value"
+          className={styles.score_value}
           initial={{ translateY: -20 }}
           animate={{ translateY: 0 }}
           transition={{ duration: 0.5 }}
@@ -33,7 +16,7 @@ function Score({ score }) {
           {score}
         </motion.span>
       </AnimatePresence>
-    </StyledScore>
+    </div>
   )
 }
 

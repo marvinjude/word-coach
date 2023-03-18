@@ -1,28 +1,17 @@
 import React from "react"
-import styled from "styled-components"
-
-const StyledImageWrapper = styled.div`
-  flex: 1;
-  height: 7rem;
-  border-radius: 10px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  overflow: hidden;
-  &:focus {
-    outline: none;
-  }
-`
+import styles from "word-coach-common/styles/styles.css"
 
 const Image = ({ url, children, ...props }) => {
   return (
-    <StyledImageWrapper
+    <div
+      className={styles.image}
       style={{
         backgroundImage: `url(${url})`,
       }}
       {...props}
     >
       {children}
-    </StyledImageWrapper>
+    </div>
   )
 }
 

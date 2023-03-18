@@ -1,17 +1,9 @@
 import React, { Fragment } from "react"
-import styled from "styled-components"
 import ImageCover from "./ImageCover"
 import useOptionsHelper from "../hooks/useOptions"
-import { StyledOr } from "./ButtonOptions"
 import Image from "./Image"
 import { CorrectIcon, WrongIcon } from "./Icons"
-
-export const Wrapper = styled.div`
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
-  color: #fff;
-`
+import styles from "word-coach-common/styles/styles.css"
 
 const ImageWithCover = ({ url, showImageCover, imageCoverIcon, onClick }) => {
   return (
@@ -40,7 +32,7 @@ export default function ImageOptions({
   })
 
   return (
-    <Wrapper>
+    <div className={styles.image_button}>
       {optionsWithHelpers.map(
         (
           {
@@ -67,10 +59,10 @@ export default function ImageOptions({
                 (currentQuestionIsAnswered && thisOptionWasSelected)
               }
             />
-            {optionIndex === 0 && <StyledOr>or</StyledOr>}
+            {optionIndex === 0 && <span className={styles.or_divider}>or</span>}
           </Fragment>
         )
       )}
-    </Wrapper>
+    </div>
   )
 }

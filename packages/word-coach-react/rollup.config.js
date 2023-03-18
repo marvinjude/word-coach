@@ -1,22 +1,17 @@
-const babel = require("@rollup/plugin-babel")
-const commonjs = require("@rollup/plugin-commonjs")
-const resolve = require("@rollup/plugin-node-resolve")
-const { terser } = require("@rollup/plugin-terser")
-const peerDepsExternal = require("rollup-plugin-peer-deps-external")
-const postcss = require("rollup-plugin-postcss")
-const postcssPresetEnv = require("postcss-preset-env")
+import babel from "@rollup/plugin-babel"
+import commonjs from "@rollup/plugin-commonjs"
+import resolve from "@rollup/plugin-node-resolve"
+import terser from "@rollup/plugin-terser"
+import peerDepsExternal from "rollup-plugin-peer-deps-external"
+import postcss from "rollup-plugin-postcss"
 
-module.exports = {
+export default {
   input: "./src/index.js",
-  external: ["react", "styled-components", "lodash.shuffle", "framer-motion"],
+  external: ["react", "lodash.shuffle", "framer-motion"],
   plugins: [
+    /**Okay! We wouldn't really wan't from this component to conflict with styles in the application where it'll be used  whats why we are using css modules here */
     postcss({
       modules: true,
-      plugins: [
-        postcssPresetEnv({
-          browsers: ["> 0.2% and not dead"],
-        }),
-      ],
     }),
     peerDepsExternal(),
     commonjs({
@@ -32,13 +27,13 @@ module.exports = {
   ],
   output: [
     {
-      file: __dirname + "/dist/index.es.js",
+      file: "./dist/index.es.js",
       format: "es",
       sourcemap: true,
       exports: "named",
     },
     {
-      file: __dirname + "/dist/index.js",
+      file: "./dist/index.js",
       format: "cjs",
       sourcemap: true,
       exports: "named",

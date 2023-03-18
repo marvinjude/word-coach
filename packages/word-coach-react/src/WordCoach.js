@@ -1,10 +1,8 @@
-import React, { useState, useRef, useMemo } from "react"
+import React, { useLayoutEffect, useState, useRef, useMemo } from "react"
 import shuffle from "lodash.shuffle"
-import { ThemeProvider } from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 
 import { themes } from "./theme"
-import { Wrapper, StyledHeader, StyledQuestion, StyledFooter } from "./styles"
 
 import Highlights from "./components/Highlights"
 import ButtonOptions from "./components/ButtonOptions"
@@ -15,9 +13,13 @@ import callbackCaller from "./utils/callbackCaller"
 import { DEFAULT_THEME } from "./constants"
 import { isDev } from "./utils/isDev"
 
-import { header } from "word-coach-common/styles"
+import {
+  getThemeString,
+  injectThemeElement,
+  injectThemeIntoElement,
+} from "word-coach-common/magic"
 
-console.log({ container, mulipleStyles })
+import styles from "word-coach-common/styles/styles.css"
 
 function WordCoach({
   theme,
@@ -139,84 +141,87 @@ function WordCoach({
     }
   })
 
+  useLayoutEffect(() => {
+    // injectThemeIntoElement(undefined, document.body)
+    injectThemeElement()
+  }, [])
+
   return (
-    <ThemeProvider theme={selectedTheme}>
-      <Wrapper ref={container}>
-        <AnimatePresence key={String(currentQuestionIndex)}>
-          <motion.div
-            transition={{ duration: 1, type: "tween" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{ padding: "1.2rem" }}
-          >
-            <StyledHeader className={header}>
-              <span>WORD COACH </span>
-              <Score score={score} />
-            </StyledHeader>
-            <div>
-              <StyledQuestion>{question} </StyledQuestion>
-              {questionType === "IMAGE" && (
-                <ImageOptions
-                  currentQuestionIndex={currentQuestionIndex}
-                  chooseAnswer={chooseAnswer}
-                  userAnswers={userAnswers}
-                  revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-                  currentQuestionIsAnswered={currentQuestionIsAnswered}
-                  options={controlledOptions}
-                  question={data.questions[currentQuestionIndex]}
-                />
-              )}
-              {questionType === "TEXT" && (
-                <ButtonOptions
-                  currentQuestionIndex={currentQuestionIndex}
-                  chooseAnswer={chooseAnswer}
-                  userAnswers={userAnswers}
-                  revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-                  currentQuestionIsAnswered={currentQuestionIsAnswered}
-                  options={controlledOptions}
-                  question={data.questions[currentQuestionIndex]}
-                />
-              )}
-            </div>
-          </motion.div>
-          <StyledFooter>
-            <div>
-              <svg
-                height="20px"
-                viewBox="0 0 24 24"
-                width="20px"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M0 0h24v24H0V0z" fill="none"></path>
-                <path
-                  fill="#868b90"
-                  d="M18 1.01L8 1c-1.1 0-2 .9-2 2v3h2V5h10v14H8v-1H6v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM10 15h2V8H5v2h3.59L3 15.59 4.41 17 10 11.41z"
-                ></path>
-                <path d="M0 0h24v24H0V0z" fill="none"></path>
-              </svg>
-            </div>
-            <div>
-              <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
-            </div>
-            <div className="skip-button-wrapper">
-              <button
-                className="skip-button"
-                onClick={() => {
-                  const isLast = currentQuestionIndex === questionsLength
-                  if (!isLast) {
-                    setCurrentQuestionIndex(prev => prev + 1)
-                    setRevealRightAndWrongAnswer(false)
-                  }
-                }}
-              >
-                SKIP
-              </button>
-            </div>
-          </StyledFooter>
-        </AnimatePresence>
-      </Wrapper>
-    </ThemeProvider>
+    <div className={styles.card} ref={container}>
+      <AnimatePresence key={String(currentQuestionIndex)}>
+        <motion.div
+          className={styles.card_upper}
+          transition={{ duration: 1, type: "tween" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className={styles.header}>
+            <span>WORD COACH</span>
+            <Score score={score} />
+          </div>
+          <div>
+            <h1 className={styles.question}>{question}</h1>
+            {questionType === "IMAGE" && (
+              <ImageOptions
+                currentQuestionIndex={currentQuestionIndex}
+                chooseAnswer={chooseAnswer}
+                userAnswers={userAnswers}
+                revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+                currentQuestionIsAnswered={currentQuestionIsAnswered}
+                options={controlledOptions}
+                question={data.questions[currentQuestionIndex]}
+              />
+            )}
+            {questionType === "TEXT" && (
+              <ButtonOptions
+                currentQuestionIndex={currentQuestionIndex}
+                chooseAnswer={chooseAnswer}
+                userAnswers={userAnswers}
+                revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+                currentQuestionIsAnswered={currentQuestionIsAnswered}
+                options={controlledOptions}
+                question={data.questions[currentQuestionIndex]}
+              />
+            )}
+          </div>
+        </motion.div>
+        <div className={styles.footer}>
+          <div>
+            <svg
+              height="20px"
+              viewBox="0 0 24 24"
+              width="20px"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M0 0h24v24H0V0z" fill="none"></path>
+              <path
+                fill="#868b90"
+                d="M18 1.01L8 1c-1.1 0-2 .9-2 2v3h2V5h10v14H8v-1H6v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM10 15h2V8H5v2h3.59L3 15.59 4.41 17 10 11.41z"
+              ></path>
+              <path d="M0 0h24v24H0V0z" fill="none"></path>
+            </svg>
+          </div>
+          <div>
+            <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
+          </div>
+          <div className={styles.skip_button_wrapper}>
+            <button
+              className={styles.skip_button}
+              onClick={() => {
+                const isLast = currentQuestionIndex === questionsLength
+                if (!isLast) {
+                  setCurrentQuestionIndex(prev => prev + 1)
+                  setRevealRightAndWrongAnswer(false)
+                }
+              }}
+            >
+              SKIP
+            </button>
+          </div>
+        </div>
+      </AnimatePresence>
+    </div>
   )
 }
 
