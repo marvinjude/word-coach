@@ -2,15 +2,12 @@ import React, { useLayoutEffect, useState, useRef, useMemo } from "react"
 import shuffle from "lodash.shuffle"
 import { AnimatePresence, motion } from "framer-motion"
 
-import { themes } from "./theme"
-
 import Highlights from "./components/Highlights"
 import ButtonOptions from "./components/ButtonOptions"
 import ImageOptions from "./components/ImageOptions"
 import Score from "./components/Score"
 
 import callbackCaller from "./utils/callbackCaller"
-import { DEFAULT_THEME } from "./constants"
 import { isDev } from "./utils/isDev"
 
 import {
@@ -39,7 +36,7 @@ function WordCoach({
     [props.data, enableShuffle]
   )
   const container = useRef()
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState([{ value: 0, id: Date.now() }])
   const [userAnswers, setUserAnswers] = useState({})
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [revealRightAndWrongAnswer, setRevealRightAndWrongAnswer] =
@@ -54,12 +51,8 @@ function WordCoach({
   const isLastQuestion = currentQuestionIndex === questionsLength
   const currentQuestionIsAnswered = String(currentQuestionIndex) in userAnswers
   const isLastQuestionAnswered = questionsLength in userAnswers
-  const selectedTheme = themes[theme] || theme[DEFAULT_THEME]
 
-  /**
-   * House heeping stuff to make sure you're doing things right
-   */
-
+  /** Warnings: Just making sure your data shape is correct */
   const MAX_NUMBER_OF_OPTION = 2
   let controlledOptions = options
 
@@ -81,14 +74,6 @@ function WordCoach({
   })
 
   /****************************************************************/
-
-  const skipQuestion = () => {
-    if (!isLastQuestion) {
-      setRevealRightAndWrongAnswer(true)
-      nextQuestion()
-    }
-  }
-
   const nextQuestion = () => {
     if (!isLastQuestion) {
       const timeout = setTimeout(() => {
@@ -101,15 +86,23 @@ function WordCoach({
     }
   }
 
+  const skipQuestion = () => {
+    setRevealRightAndWrongAnswer(true)
+    nextQuestion()
+  }
+
   const chooseAnswer = index => {
     const answerIsCorrect =
       data.questions[currentQuestionIndex].answer.includes(index)
 
     const scoreForQuestion =
       data.questions[currentQuestionIndex].score || defaultScore || 1
-    const newScore = answerIsCorrect ? score + scoreForQuestion : score
+    const newScore = answerIsCorrect
+      ? score[0].value + scoreForQuestion
+      : score[0].value
 
-    setScore(newScore)
+    if (newScore != score[0].value)
+      setScore([{ value: newScore, id: Date.now() }])
 
     callbackCaller(onSelectAnswer, {
       answerIndex: index,
@@ -126,7 +119,7 @@ function WordCoach({
   }
 
   if (isLastQuestionAnswered) {
-    callbackCaller(onEnd, { answers: userAnswers, score })
+    callbackCaller(onEnd, { answers: userAnswers, score: score[0] })
   }
 
   const dots = Array.from({ length: data.questions.length }).map((_, index) => {
@@ -142,25 +135,23 @@ function WordCoach({
   })
 
   useLayoutEffect(() => {
-    // injectThemeIntoElement(undefined, document.body)
-    injectThemeElement()
+    injectThemeElement(theme)
   }, [])
 
   return (
     <div className={styles.card} ref={container}>
       <AnimatePresence key={String(currentQuestionIndex)}>
-        <motion.div
-          className={styles.card_upper}
-          transition={{ duration: 1, type: "tween" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
+        <div className={styles.card_upper}>
           <div className={styles.header}>
-            <span>WORD COACH</span>
+            <span className={styles.icon}>WORD COACH</span>
             <Score score={score} />
           </div>
-          <div>
+          <motion.div
+            transition={{ duration: 1, type: "tween" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: -20, opacity: 0 }}
+          >
             <h1 className={styles.question}>{question}</h1>
             {questionType === "IMAGE" && (
               <ImageOptions
@@ -184,8 +175,8 @@ function WordCoach({
                 question={data.questions[currentQuestionIndex]}
               />
             )}
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
         <div className={styles.footer}>
           <div>
             <svg
@@ -206,16 +197,7 @@ function WordCoach({
             <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
           </div>
           <div className={styles.skip_button_wrapper}>
-            <button
-              className={styles.skip_button}
-              onClick={() => {
-                const isLast = currentQuestionIndex === questionsLength
-                if (!isLast) {
-                  setCurrentQuestionIndex(prev => prev + 1)
-                  setRevealRightAndWrongAnswer(false)
-                }
-              }}
-            >
+            <button className={styles.skip_button} onClick={skipQuestion}>
               SKIP
             </button>
           </div>

@@ -5,12 +5,23 @@ const Image = ({ url, children, ...props }) => {
   return (
     <div
       className={styles.image}
-      style={{
-        backgroundImage: `url(${url})`,
-      }}
       {...props}
+      style={{ position: "relative", overflow: "hidden" }}
     >
-      {children}
+      <img
+        src={url}
+        style={{ objectFit: "cover", width: "100%", height: "100%" }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: "0",
+        }}
+      >
+        {children}
+      </div>
     </div>
   )
 }

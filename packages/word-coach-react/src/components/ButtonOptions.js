@@ -37,6 +37,7 @@ export default function ButtonOptions({
 
   return (
     <div className={styles.button_group}>
+      {question.image && <Image url={question.image} />}
       <div className={styles.button_group_wrapper}>
         {optionsWithHelpers.map(
           (
