@@ -63,11 +63,11 @@ export default function ButtonOptions({
                     !thisOptionIsCorrectAnswer &&
                     (revealRightAndWrongAnswer ||
                       (currentQuestionIsAnswered && thisOptionWasSelected)),
-                  [styles["button--unanswered"]]: !currentQuestionIsAnswered,
                 })}
                 onClick={chooseAnswerHandler}
               >
-                {currentQuestionIsAnswered && thisOptionWasSelected && (
+                {(currentQuestionIsAnswered && thisOptionWasSelected) ||
+                revealRightAndWrongAnswer ? (
                   <ButtonHint
                     icon={
                       thisOptionIsCorrectAnswer
@@ -75,17 +75,7 @@ export default function ButtonOptions({
                         : () => <WrongIcon />
                     }
                   />
-                )}
-
-                {revealRightAndWrongAnswer && (
-                  <ButtonHint
-                    icon={
-                      thisOptionIsCorrectAnswer
-                        ? () => <CorrectIcon />
-                        : () => <WrongIcon />
-                    }
-                  />
-                )}
+                ) : null}
                 {text}
               </button>
               {optionIndex === 0 && (
