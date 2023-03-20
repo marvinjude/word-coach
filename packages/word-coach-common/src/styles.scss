@@ -30,10 +30,6 @@
     outline: none;
   }
 
-  & p {
-    text-align: left;
-  }
-
   & svg {
     display: block;
     line-height: 1.2rem;
@@ -92,6 +88,7 @@
   margin-bottom: 1.25rem;
   font-size: 1.05rem;
   font-weight: 400;
+  text-align: center;
 }
 
 .footer {

@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState, useRef, useMemo } from "react"
 import shuffle from "lodash.shuffle"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
 
 import Highlights from "./components/Highlights"
 import ButtonOptions from "./components/ButtonOptions"
@@ -9,8 +9,8 @@ import Score from "./components/Score"
 
 import callbackCaller from "./utils/callbackCaller"
 import { isDev } from "./utils/isDev"
-import { injectThemeElement, removeThemeElement } from "word-coach-common/magic"
 
+import { injectThemeElement, removeThemeElement } from "word-coach-common/magic"
 import styles from "word-coach-common/styles/styles.css"
 
 function WordCoach({
@@ -142,69 +142,68 @@ function WordCoach({
 
   return (
     <div className={styles.card} ref={container}>
-      <AnimatePresence key={String(currentQuestionIndex)}>
-        <div className={styles.card_upper}>
-          <div className={styles.header}>
-            <span className={styles.icon}>WORD COACH</span>
-            <Score score={score} />
-          </div>
-          <motion.div
-            transition={{ duration: 1, type: "tween" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: -20, opacity: 0 }}
+      <div className={styles.card_upper}>
+        <div className={styles.header}>
+          <span className={styles.icon}>WORD COACH</span>
+          <Score score={score} />
+        </div>
+        <motion.div
+          key={currentQuestionIndex}
+          transition={{ duration: 1, type: "tween" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: -20, opacity: 0 }}
+        >
+          <p className={styles.question}>{question}</p>
+          {questionType === "IMAGE" && (
+            <ImageOptions
+              currentQuestionIndex={currentQuestionIndex}
+              chooseAnswer={chooseAnswer}
+              userAnswers={userAnswers}
+              revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+              currentQuestionIsAnswered={currentQuestionIsAnswered}
+              options={controlledOptions}
+              question={data.questions[currentQuestionIndex]}
+            />
+          )}
+          {questionType === "TEXT" && (
+            <ButtonOptions
+              currentQuestionIndex={currentQuestionIndex}
+              chooseAnswer={chooseAnswer}
+              userAnswers={userAnswers}
+              revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+              currentQuestionIsAnswered={currentQuestionIsAnswered}
+              options={controlledOptions}
+              question={data.questions[currentQuestionIndex]}
+            />
+          )}
+        </motion.div>
+      </div>
+      <div className={styles.footer}>
+        <div>
+          <svg
+            height="20px"
+            viewBox="0 0 24 24"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <h1 className={styles.question}>{question}</h1>
-            {questionType === "IMAGE" && (
-              <ImageOptions
-                currentQuestionIndex={currentQuestionIndex}
-                chooseAnswer={chooseAnswer}
-                userAnswers={userAnswers}
-                revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-                currentQuestionIsAnswered={currentQuestionIsAnswered}
-                options={controlledOptions}
-                question={data.questions[currentQuestionIndex]}
-              />
-            )}
-            {questionType === "TEXT" && (
-              <ButtonOptions
-                currentQuestionIndex={currentQuestionIndex}
-                chooseAnswer={chooseAnswer}
-                userAnswers={userAnswers}
-                revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-                currentQuestionIsAnswered={currentQuestionIsAnswered}
-                options={controlledOptions}
-                question={data.questions[currentQuestionIndex]}
-              />
-            )}
-          </motion.div>
+            <path d="M0 0h24v24H0V0z" fill="none"></path>
+            <path
+              fill="#868b90"
+              d="M18 1.01L8 1c-1.1 0-2 .9-2 2v3h2V5h10v14H8v-1H6v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM10 15h2V8H5v2h3.59L3 15.59 4.41 17 10 11.41z"
+            ></path>
+            <path d="M0 0h24v24H0V0z" fill="none"></path>
+          </svg>
         </div>
-        <div className={styles.footer}>
-          <div>
-            <svg
-              height="20px"
-              viewBox="0 0 24 24"
-              width="20px"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M0 0h24v24H0V0z" fill="none"></path>
-              <path
-                fill="#868b90"
-                d="M18 1.01L8 1c-1.1 0-2 .9-2 2v3h2V5h10v14H8v-1H6v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM10 15h2V8H5v2h3.59L3 15.59 4.41 17 10 11.41z"
-              ></path>
-              <path d="M0 0h24v24H0V0z" fill="none"></path>
-            </svg>
-          </div>
-          <div>
-            <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
-          </div>
-          <div className={styles.skip_button_wrapper}>
-            <button className={styles.skip_button} onClick={skipQuestion}>
-              SKIP
-            </button>
-          </div>
+        <div>
+          <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
         </div>
-      </AnimatePresence>
+        <div className={styles.skip_button_wrapper}>
+          <button className={styles.skip_button} onClick={skipQuestion}>
+            SKIP
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
