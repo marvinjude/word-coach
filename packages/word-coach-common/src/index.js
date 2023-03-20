@@ -6,4 +6,4 @@ export {
   classNames,
 } from "./utils"
 export { themesKeys } from "./themes"
-import "../styles.scss"
+import "./styles/styles.scss"

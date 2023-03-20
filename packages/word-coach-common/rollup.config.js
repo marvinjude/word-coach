@@ -2,7 +2,7 @@ import { babel } from "@rollup/plugin-babel"
 import sass from "rollup-plugin-sass"
 
 export default {
-  input: "src/magic/index.js",
+  input: "src/index.js",
   output: [
     {
       file: "dist/index.js",
@@ -19,13 +19,13 @@ export default {
   ],
 
   plugins: [
+    sass({
+      output: "dist/styles.css",
+      include: ["src/*/*.scss"],
+    }),
     babel({
       babelHelpers: "bundled",
       presets: ["@babel/preset-env"],
-    }),
-    sass({
-      output: "dist/styles.css",
-      include: ["src/*.scss"],
     }),
   ],
 }

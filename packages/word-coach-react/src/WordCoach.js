@@ -10,7 +10,7 @@ import Score from "./components/Score"
 import callbackCaller from "./utils/callbackCaller"
 import { isDev } from "./utils/isDev"
 
-import { injectThemeElement, removeThemeElement } from "word-coach-common/magic"
+import { injectThemeElement, removeThemeElement } from "word-coach-common"
 import styles from "word-coach-common/styles/styles.css"
 
 function WordCoach({

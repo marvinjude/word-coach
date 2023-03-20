@@ -1,6 +1,6 @@
 import React from "react"
 import { motion } from "framer-motion"
-import { classNames } from "word-coach-common/magic"
+import { classNames } from "word-coach-common"
 import styles from "word-coach-common/styles/styles.css"
 
 export default function HighLights({ dots, selectedDotIndex }) {

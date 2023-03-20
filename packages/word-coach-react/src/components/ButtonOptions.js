@@ -4,7 +4,7 @@ import useOptionsHelper from "../hooks/useOptions"
 import Image from "./Image"
 import { CorrectIcon, WrongIcon } from "./Icons"
 import styles from "word-coach-common/styles/styles.css"
-import { classNames } from "word-coach-common/magic"
+import { classNames } from "word-coach-common"
 
 function ButtonHint({ icon }) {
   return (

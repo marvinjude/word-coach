@@ -5,7 +5,7 @@
   "type": "module",
   "exports": {
     "./styles/styles.css": "./dist/styles.css",
-    "./magic": {
+    ".": {
       "import": "./dist/index.es.js",
       "require": "./dist/index.js"
     }
