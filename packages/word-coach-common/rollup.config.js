@@ -1,8 +1,9 @@
 import { babel } from "@rollup/plugin-babel"
 import sass from "rollup-plugin-sass"
+import typescript from "@rollup/plugin-typescript"
 
 export default {
-  input: "src/index.js",
+  input: "./src/index.ts",
   output: [
     {
       file: "dist/index.js",
@@ -19,6 +20,7 @@ export default {
   ],
 
   plugins: [
+    typescript(),
     sass({
       output: "dist/styles.css",
       include: ["src/*/*.scss"],
