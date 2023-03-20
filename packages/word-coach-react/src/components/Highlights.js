@@ -11,8 +11,6 @@ export default function HighLights({ dots, selectedDotIndex }) {
 
         return (
           <motion.span
-            wrong={dot.wrong}
-            right={dot.right}
             className={classNames(styles.highlight, {
               [styles["highlight--wrong"]]: dot.wrong,
               [styles["highlight--right"]]: dot.right,

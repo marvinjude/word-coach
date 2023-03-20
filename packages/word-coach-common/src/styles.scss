@@ -144,24 +144,24 @@
       outline: none;
       box-shadow: 0 0 0 3px #2f81ed4a;
     }
-  }
 
-  .button[state="wrong"] {
-    border: 1px solid var(--optionButtonWrongBorder);
-    background: var(--optionButtonWrongBackground);
-    color: var(--optionButtonWrongText);
-  }
+    &.button--wrong {
+      border: 1px solid var(--optionButtonWrongBorder);
+      background: var(--optionButtonWrongBackground);
+      color: var(--optionButtonWrongText);
+    }
 
-  .button[state="right"] {
-    border: 1px solid var(--optionButtonRightBorder);
-    background: var(--optionButtonRightBackground);
-    color: var(--optionButtonRightText);
-  }
+    &.button--right {
+      border: 1px solid var(--optionButtonRightBorder);
+      background: var(--optionButtonRightBackground);
+      color: var(--optionButtonRightText);
+    }
 
-  .button[state="unanswered"] {
-    border: 1px solid var(--optionButtonUnansweredBorder);
-    background: var(--optionButtonUnansweredBackground);
-    color: var(--optionButtonUnansweredText);
+    &.button--unanswered {
+      border: 1px solid var(--optionButtonUnansweredBorder);
+      background: var(--optionButtonUnansweredBackground);
+      color: var(--optionButtonUnansweredText);
+    }
   }
 }
 

@@ -7,7 +7,7 @@ function Score({ score }) {
     <div className={styles.score}>
       Score<span className={styles.dot}>•</span>
       <AnimatePresence initial={false} exitBeforeEnter>
-        {/* Ideally, score should be a number but because we're trying to apply some entry/exit animating, we're using an array here */}
+        {/* Ideally, score should be a number but because we're trying to apply some entry/exit animation to each score, we're using an array here */}
         {score.map(_score => (
           <motion.span
             key={_score.id}

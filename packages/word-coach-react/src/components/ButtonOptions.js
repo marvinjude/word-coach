@@ -4,6 +4,7 @@ import useOptionsHelper from "../hooks/useOptions"
 import Image from "./Image"
 import { CorrectIcon, WrongIcon } from "./Icons"
 import styles from "word-coach-common/styles/styles.css"
+import { classNames } from "word-coach-common/magic"
 
 function ButtonHint({ icon }) {
   return (
@@ -52,20 +53,19 @@ export default function ButtonOptions({
           ) => (
             <Fragment key={index}>
               <button
-                className={styles.button}
                 autoFocus
+                className={classNames(styles.button, {
+                  [styles["button--right"]]:
+                    thisOptionIsCorrectAnswer &&
+                    (revealRightAndWrongAnswer ||
+                      (currentQuestionIsAnswered && thisOptionWasSelected)),
+                  [styles["button--wrong"]]:
+                    !thisOptionIsCorrectAnswer &&
+                    (revealRightAndWrongAnswer ||
+                      (currentQuestionIsAnswered && thisOptionWasSelected)),
+                  [styles["button--unanswered"]]: !currentQuestionIsAnswered,
+                })}
                 onClick={chooseAnswerHandler}
-                state={
-                  thisOptionIsCorrectAnswer &&
-                  (revealRightAndWrongAnswer ||
-                    (currentQuestionIsAnswered && thisOptionWasSelected))
-                    ? "right"
-                    : !thisOptionIsCorrectAnswer &&
-                      (revealRightAndWrongAnswer ||
-                        (currentQuestionIsAnswered && thisOptionWasSelected))
-                    ? "wrong"
-                    : "unanswered"
-                }
               >
                 {currentQuestionIsAnswered && thisOptionWasSelected && (
                   <ButtonHint

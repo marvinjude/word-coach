@@ -23,7 +23,7 @@ export function injectThemeIntoElement(themeKey = "nigeria", element) {
 
 export function injectThemeElement(themeKey) {
   const style = document.createElement("style")
-  // style.setAttribute("data-theme", "theme-for-word-coach")
+  style.setAttribute("data-theme", "theme-for-word-coach")
   document.head.appendChild(style)
 
   const themeString = getThemeString(themeKey)

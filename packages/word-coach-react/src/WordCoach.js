@@ -9,12 +9,7 @@ import Score from "./components/Score"
 
 import callbackCaller from "./utils/callbackCaller"
 import { isDev } from "./utils/isDev"
-
-import {
-  getThemeString,
-  injectThemeElement,
-  injectThemeIntoElement,
-} from "word-coach-common/magic"
+import { injectThemeElement, removeThemeElement } from "word-coach-common/magic"
 
 import styles from "word-coach-common/styles/styles.css"
 
@@ -134,8 +129,15 @@ function WordCoach({
     }
   })
 
+  /**
+   * This lets us inject theme variable into the DOM based on the selected theme
+   */
   useLayoutEffect(() => {
     injectThemeElement(theme)
+
+    return () => {
+      removeThemeElement()
+    }
   }, [])
 
   return (
