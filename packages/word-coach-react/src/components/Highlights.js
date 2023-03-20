@@ -14,7 +14,6 @@ export default function HighLights({ dots, selectedDotIndex }) {
             className={classNames(styles.highlight, {
               [styles["highlight--wrong"]]: dot.wrong,
               [styles["highlight--right"]]: dot.right,
-              [styles["highlight--unanswered"]]: !dot.right && !dot.wrong,
             })}
             key={index}
             animate={{ scale }}

@@ -223,11 +223,7 @@
     transition: all 0.3s ease-in-out;
     flex-shrink: 0;
     flex-grow: 0;
-    background-color: var(--primary);
-
-    &.highlight--unanswered {
-      background-color: var(--highlighterUnanswered);
-    }
+    background-color: var(--highlighterUnanswered);
 
     &.highlight--right {
       background-color: var(--highlighterRight);
