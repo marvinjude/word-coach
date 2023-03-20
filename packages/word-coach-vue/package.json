@@ -1,6 +1,7 @@
 {
   "name": "word-coach-vue",
   "type": "module",
+  "author": "Jude Agboola <marvinjudehk@gmail.com>",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

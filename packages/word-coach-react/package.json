@@ -1,6 +1,7 @@
 {
   "name": "word-coach-react",
   "type": "module",
+  "author": "Jude Agboola <marvinjudehk@gmail.com>",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -47,7 +48,6 @@
     "clean": "del-cli dist/*"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "description": ""
 }

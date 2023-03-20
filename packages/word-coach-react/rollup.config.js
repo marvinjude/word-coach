@@ -5,11 +5,12 @@ import terser from "@rollup/plugin-terser"
 import peerDepsExternal from "rollup-plugin-peer-deps-external"
 import postcss from "rollup-plugin-postcss"
 
+
 export default {
   input: "./src/index.js",
   external: ["react", "lodash.shuffle", "framer-motion"],
   plugins: [
-    /**Okay! We wouldn't really wan't from this component to conflict with styles in the application where it'll be used  whats why we are using css modules here */
+    /**Okay! We wouldn't really wan't styles in our common package to conflict with styles in the application where the WordCoach component will be used that's why we are using css modules here */
     postcss({
       modules: true,
     }),
