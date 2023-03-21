@@ -1,12 +1,36 @@
-# word-coach
-![Bagel](https://github.com/yagiz/Bagel/blob/master/assets/header.png?raw=true)
+<p align="center">
+  <a href="https://nextjs.org">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_dark_background.png">
+      <img src="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_light_background.png" height="128">
+    </picture>
+    <h1 align="center">Next.js</h1>
+  </a>
+</p>
+
+<p align="center">
+  <a aria-label="Vercel logo" href="https://vercel.com">
+    <img src="https://img.shields.io/badge/MADE%20BY%20Vercel-000000.svg?style=for-the-badge&logo=Vercel&labelColor=000">
+  </a>
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/next">
+    <img alt="" src="https://img.shields.io/npm/v/next.svg?style=for-the-badge&labelColor=000000">
+  </a>
+  <a aria-label="License" href="https://github.com/vercel/next.js/blob/canary/license.md">
+    <img alt="" src="https://img.shields.io/npm/l/next.svg?style=for-the-badge&labelColor=000000">
+  </a>
+  <a aria-label="Join the community on GitHub" href="https://github.com/vercel/next.js/discussions">
+    <img alt="" src="https://img.shields.io/badge/Join%20the%20community-blueviolet.svg?style=for-the-badge&logo=Next.js&labelColor=000000&logoWidth=20">
+  </a>
+</p>
 
 Word Coach is simply a replica of the [Google word coach](https://www.seoexpertindelhi.in/google-word-coach/) built in React and Vuejs. You can see the orginal Google Word coach in action by searching "Google Word coach" on Google via **your mobile device**. This project may only be used for learning purposes as the initial idea is from Google.
 
 ## Examples
+
 We have usage examples on CodeSandbox:
-+ [React](https://codesandbox.com/iiheu3hg7e83)
-+ [VueJs](https://codesandbox.com/iiheu3hg7e8ri3ieh3)
+
+- [React](https://codesandbox.com/iiheu3hg7e83)
+- [VueJs](https://codesandbox.com/iiheu3hg7e8ri3ieh3)
 
 ## Installation
 
@@ -36,7 +60,6 @@ If you feel ambitious and you'll like to write Word Coach in another library, I'
 This project is a monorepo and each package is stored in the [packages directory](https://github.com/marvinjude/word-coach/packages/).
 
 TODO: Write more details about contributing a package...
-
 
 ## 📝 License
 
