@@ -2,7 +2,11 @@ import React from "react"
 import { motion } from "framer-motion"
 import styles from "word-coach-common/styles/styles.css"
 
-function ImageCover({ icon }) {
+interface ImageOverlayProps {
+  children?: React.ReactNode
+}
+
+const ImageOverlay: React.FC<ImageOverlayProps> = ({ children }) => {
   return (
     <div className={styles.image_cover}>
       <motion.div
@@ -17,12 +21,11 @@ function ImageCover({ icon }) {
         initial={{ translateY: "50%" }}
         animate={{ translateY: "0%" }}
         role="img"
-        aria-label="right"
       >
-        {icon && icon()}
+        {children}
       </motion.span>
     </div>
   )
 }
 
-export default ImageCover
+export default ImageOverlay

@@ -1,1 +1,12 @@
-tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationDir": "./types",
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+  },
+  "exclude": ["dist", "node_modules"]
+}

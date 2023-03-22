@@ -3,7 +3,17 @@ import { motion } from "framer-motion"
 import { classNames } from "word-coach-common"
 import styles from "word-coach-common/styles/styles.css"
 
-export default function HighLights({ dots, selectedDotIndex }) {
+/**
+ * Highlights is a component that shows the correct and wrong answers.
+ * @param dots - An array that represents the state all dots in the highlight.
+ * @param selectedDotIndex - The index of the dot that is currently selected.
+ */
+interface HighLightsProps {
+  dots: Array<{ wrong: boolean; right: boolean }>
+  selectedDotIndex: number
+}
+
+const HighLights: React.FC<HighLightsProps> = ({ dots, selectedDotIndex }) => {
   return (
     <div className={styles.highlights}>
       {dots.map((dot, index) => {
@@ -23,3 +33,5 @@ export default function HighLights({ dots, selectedDotIndex }) {
     </div>
   )
 }
+
+export default HighLights

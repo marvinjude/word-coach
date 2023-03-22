@@ -7,6 +7,9 @@
   "module": "dist/index.es.js",
   "homepage": "https://github.com/marvinjude/word-coach/word-coach-react#readme",
   "bugs": "https://github.com/marvinjude/word-coach/issues",
+  "keywords": [],
+  "license": "MIT",
+  "description": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/marvinjude/word-coach.git",
@@ -22,27 +25,30 @@
     "@babel/preset-react": "^7.8.3",
     "@rollup/plugin-babel": "^6.0.0",
     "@rollup/plugin-commonjs": "^24.0.0",
-    "@rollup/plugin-eslint": "^8.0.1",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^8.3.0",
+    "@svgr/rollup": "^6.5.1",
+    "@types/node": "^18.15.5",
+    "@types/react": "^18.0.28",
     "autoprefixer": "^10.4.14",
     "del-cli": "^5.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "node-sass": "^8.0.0",
     "postcss-preset-env": "^6.0.0",
+    "react": "^18.0.0",
     "rollup": "^3.0.0",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^2.0.0",
-    "typescript": "^4.5.4"
+    "tslib": "^2.5.0",
+    "typescript": "^4.5.4",
+    "typescript-plugin-css-modules": "^4.2.3"
   },
   "dependencies": {
-    "framer-motion": "^5.4.5",
-    "lodash.shuffle": "^4.2.0",
+    "framer-motion": "^10.8.5",
     "prop-types": "^15.7.2",
-    "react-animate-on-change": "^2.2.0",
     "word-coach-common": "workspace:*"
   },
   "peerDependencies": {
@@ -52,8 +58,5 @@
     "build": "NODE_ENV=production rollup -c rollup.config.js",
     "watch": "rollup --config rollup.config.js --watch",
     "clean": "del-cli dist/*"
-  },
-  "keywords": [],
-  "license": "ISC",
-  "description": ""
+  }
 }
