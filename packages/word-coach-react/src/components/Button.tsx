@@ -1,9 +1,10 @@
 import * as React from "react"
-import styles from "word-coach-common/styles/styles.css"
+import { motion } from "framer-motion"
+
 import { classNames } from "word-coach-common"
 import Cross from "word-coach-common/icons/cross.svg"
 import Check from "word-coach-common/icons/check.svg"
-import { motion } from "framer-motion"
+import styles from "word-coach-common/styles/styles.css"
 
 interface ButtonProps {
   onClick: () => void
