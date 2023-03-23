@@ -38,7 +38,7 @@
   border: var(--containerBorder);
   border-radius: 10px;
   overflow: hidden;
-  min-width: 390px;
+  width: 390px;
   min-height: 265px;
   position: relative;
   text-align: center;
@@ -116,43 +116,50 @@
   }
 }
 
-.button_group {
+.image_options_wrapper {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  color: #fff;
+}
+
+.button_options_wrapper {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
 
-  .button_group_wrapper {
-    flex: 1 1 0;
+.button_group {
+  flex: 1 1 0;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  line-height: 1.5rem;
+  cursor: pointer;
+  height: 2.7rem;
+  white-space: nowrap;
+  border: 1px solid var(--optionButtonUnansweredBorder);
+  background: var(--optionButtonUnansweredBackground);
+  color: var(--optionButtonUnansweredText);
+
+  &.button--wrong {
+    border: 1px solid var(--optionButtonWrongBorder);
+    background: var(--optionButtonWrongBackground);
+    color: var(--optionButtonWrongText);
   }
 
-  .button {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    width: 100%;
-    transition: all 0.3s ease-in-out;
-    padding: 0.6rem;
-    border-radius: 0.5rem;
-    line-height: 1.5rem;
-    cursor: pointer;
-    height: 2.7rem;
-    white-space: nowrap;
-    border: 1px solid var(--optionButtonUnansweredBorder);
-    background: var(--optionButtonUnansweredBackground);
-    color: var(--optionButtonUnansweredText);
-
-    &.button--wrong {
-      border: 1px solid var(--optionButtonWrongBorder);
-      background: var(--optionButtonWrongBackground);
-      color: var(--optionButtonWrongText);
-    }
-
-    &.button--right {
-      border: 1px solid var(--optionButtonRightBorder);
-      background: var(--optionButtonRightBackground);
-      color: var(--optionButtonRightText);
-    }
+  &.button--right {
+    border: 1px solid var(--optionButtonRightBorder);
+    background: var(--optionButtonRightBackground);
+    color: var(--optionButtonRightText);
   }
 }
 
@@ -205,13 +212,6 @@
     font-size: 2.25rem;
     z-index: 10;
   }
-}
-
-.image_button {
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
-  color: #fff;
 }
 
 .highlights {

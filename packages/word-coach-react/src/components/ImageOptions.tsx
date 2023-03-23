@@ -28,7 +28,7 @@ const ImageOptions: React.FC<ImageOptionsProps> = ({
   question,
 }) => {
   return (
-    <div className={styles.image_button}>
+    <div className={styles.image_options_wrapper}>
       {options.map((option, index) => {
         const thisOptionWasSelected =
           userAnswers[currentQuestionIndex] === index

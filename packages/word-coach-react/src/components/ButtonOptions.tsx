@@ -24,9 +24,9 @@ const ButtonOptions: React.FC<ButtonOptionsProps> = ({
   question,
 }) => {
   return (
-    <div className={styles.button_group}>
+    <div className={styles.button_options_wrapper}>
       {question.image && <Image url={question.image} />}
-      <div className={styles.button_group_wrapper}>
+      <div className={styles.button_group}>
         {options.map((option, index) => {
           const thisOptionWasSelected =
             userAnswers[currentQuestionIndex] === index

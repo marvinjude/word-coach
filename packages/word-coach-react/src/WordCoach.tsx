@@ -317,7 +317,11 @@ const WordCoach: React.FC<WordCoachProps> = ({
                 y1="0%"
                 y2="23.865%"
               >
-                <stop offset="0%" stopColor="currentColor" stopOpacity="0"></stop>
+                <stop
+                  offset="0%"
+                  stopColor="currentColor"
+                  stopOpacity="0"
+                ></stop>
                 <stop
                   offset="63.146%"
                   stopColor="currentColor"
