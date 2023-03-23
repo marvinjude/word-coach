@@ -56,7 +56,7 @@ const ButtonOptions: React.FC<ButtonOptionsProps> = ({
               <Button state={state} onClick={() => chooseAnswer(index)}>
                 {(option as TextOption).text}
               </Button>
-              {index === 0 && <span className={styles.or_divider}>or</span>}
+              {index === 0 && <div className={styles.or_divider}>or</div>}
             </Fragment>
           )
         })}

@@ -96,7 +96,7 @@ export const themes = {
     optionButtonRightText: "white",
     optionButtonRightBackground: "#34a853",
     optionButtonWrongBorder: "#ebf8ff29",
-    optionButtonWrongText: "",
+    optionButtonWrongText: "white",
     optionButtonWrongBackground: "#ea4335",
   },
   cobalt: {

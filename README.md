@@ -59,3 +59,21 @@ TODO: Write more details about contributing a package...
 ## 📝 License
 
 Licensed under the [MIT License](https://github.com/marvinjude/word-coach/license.md)
+
+## Todo
+
+- Build the rest of the component
+
+- Write test with playright
+
+- Research if we can wire up with chatGPT to generate questions for an example app ✓
+- Design example app
+- Make example app that generates questions using chatGPT
+
+- Design loading state
+- General cleanup
+- TS type for css & svg
+- Docs around vue and how it's not ready yet
+- Other docs
+- Simple Codesandbox example
+- Ship to NPM

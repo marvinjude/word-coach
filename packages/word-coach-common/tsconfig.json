@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "declaration": true,
     "declarationDir": "./types",
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "exclude": ["dist", "node_modules"]
 }

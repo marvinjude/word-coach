@@ -1,0 +1,84 @@
+{
+  "questions": [
+    {
+      "type": "TEXT",
+      "question": "What is the capital city of Japan?",
+      "score": 30,
+      "options": [
+        {
+          "text": "Tokyo"
+        },
+        {
+          "text": "Seoul"
+        }
+      ],
+      "answer": [
+        0
+      ]
+    },
+    {
+      "type": "IMAGE",
+      "question": "Which country is this flag from?",
+      "score": 30,
+      "options": [
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Flag_of_Libya.svg/800px-Flag_of_Libya.svg.png"
+        },
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Flag_of_Egypt.svg/1280px-Flag_of_Egypt.svg.png"
+        }
+      ],
+      "answer": [
+        0
+      ]
+    },
+    {
+      "type": "TEXT",
+      "question": "What is the largest country in Africa?",
+      "score": 30,
+      "options": [
+        {
+          "text": "Nigeria"
+        },
+        {
+          "text": "Algeria"
+        }
+      ],
+      "answer": [
+        1
+      ]
+    },
+    {
+      "type": "IMAGE",
+      "question": "Which city is featured in this picture?",
+      "score": 30,
+      "options": [
+        {
+          "url": "https://cdn.pixabay.com/photo/2015/03/26/10/18/moscow-690055_1280.jpg"
+        },
+        {
+          "url": "https://cdn.pixabay.com/photo/2018/07/14/16/36/paris-3533584_1280.jpg"
+        }
+      ],
+      "answer": [
+        0
+      ]
+    },
+    {
+      "type": "TEXT",
+      "question": "What is the highest mountain in the world?",
+      "score": 30,
+      "options": [
+        {
+          "text": "Mount Kilimanjaro"
+        },
+        {
+          "text": "Mount Everest"
+        }
+      ],
+      "answer": [
+        1
+      ]
+    }
+  ]
+}

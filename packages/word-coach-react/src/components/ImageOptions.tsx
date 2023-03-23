@@ -48,7 +48,7 @@ const ImageOptions: React.FC<ImageOptionsProps> = ({
                   </ImageOverlay>
                 ))}
             </Image>
-            {index === 0 && <span className={styles.or_divider}>or</span>}
+            {index === 0 && <div className={styles.or_divider}>or</div>}
           </Fragment>
         )
       })}
