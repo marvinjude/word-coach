@@ -10,8 +10,8 @@ import callbackCaller from "./utils/callbackCaller"
 import { isDev } from "./utils/isDev"
 
 import {
-  injectThemeElement,
-  removeThemeElement,
+  injectStyleTagWithThemeVars,
+  removeStyleTagWithThemeVars,
   shuffleArray as shuffle,
 } from "word-coach-common"
 import type { Themes } from "word-coach-common"
@@ -47,7 +47,7 @@ export interface IQuestion {
    * @example
    * "https://example.com/image.png"
    */
-  image: string
+  image?: string
 
   /**
    * The options to be displayed
@@ -98,36 +98,42 @@ export interface IQuestion {
 
 interface WordCoachProps {
   /**
+   * Whether to show a loading state, useful when fetching data from an API
+   * @default false
+   */
+  isLoading?: boolean
+
+  /**
    * Whether to reveal the right and wrong answers when the user skips the question
    * @default false
    */
-  revealAnswerOnSkip: boolean
+  revealAnswerOnSkip?: boolean
 
   /**
    * Theme to be used, defaults to "nigeria", CSS variables for corresponding them is injected into the DOM
    * @default "nigeria"
    */
-  theme: Themes
+  theme?: Themes
 
   /**
    * The default score to be used when the score for a question is not specified
    */
-  defaultScore: number
+  defaultScore?: number
 
   /**
    * Callback function to be called when the quiz ends
    */
-  onEnd: (result: { answers: Array<number>; score: number }) => void
+  onEnd?: (result: { answers: Array<number>; score: number }) => void
 
   /**
    * Whether to shuffle the questions
    */
-  enableShuffle: boolean
+  enableShuffle?: boolean
 
   /**
    * Callback function to be called when the user selects an answer
    */
-  onSelectAnswer: (resut: {
+  onSelectAnswer?: (resut: {
     answerIndex: number
     questionIndex: number
     currentScore: number
@@ -164,13 +170,15 @@ interface WordCoachProps {
 }
 
 const MAX_NUMBER_OF_OPTION = 2
+const DELAY_BEFORE_NEXT_QUESTION = 1200
 
 const WordCoach: React.FC<WordCoachProps> = ({
   theme,
   defaultScore,
   onEnd,
-  enableShuffle,
+  enableShuffle = false,
   onSelectAnswer,
+  isLoading = false,
   ...props
 }) => {
   // Memoise the shuffled question so we don't reshuffle on rerender
@@ -216,8 +224,8 @@ const WordCoach: React.FC<WordCoachProps> = ({
       }
     })
   })
+  // End of warnings
 
-  /****************************************************************/
   const nextQuestion = () => {
     if (!isLastQuestion) {
       const timeout = setTimeout(() => {
@@ -226,7 +234,7 @@ const WordCoach: React.FC<WordCoachProps> = ({
         setRevealRightAndWrongAnswer(false)
 
         clearTimeout(timeout)
-      }, 1200)
+      }, DELAY_BEFORE_NEXT_QUESTION)
     }
   }
 
@@ -284,70 +292,128 @@ const WordCoach: React.FC<WordCoachProps> = ({
    * This lets us inject theme variable into the DOM based on the selected theme
    */
   useLayoutEffect(() => {
-    injectThemeElement(theme)
+    injectStyleTagWithThemeVars(theme)
 
     return () => {
-      removeThemeElement()
+      removeStyleTagWithThemeVars()
     }
   }, [])
 
   return (
     <div className={styles.card}>
-      <div className={styles.card_upper}>
-        <div className={styles.header}>
-          <span className={styles.icon}>WORD COACH</span>
-          <Score scoreList={scoreList} />
-        </div>
-        <motion.div
-          key={currentQuestionIndex}
-          transition={{ duration: 1, type: "tween" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: -20 }}
-        >
-          <p className={styles.question}>{question}</p>
-          {questionType === "IMAGE" && (
-            <ImageOptions
-              currentQuestionIndex={currentQuestionIndex}
-              chooseAnswer={chooseAnswer}
-              userAnswers={userAnswers}
-              revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-              currentQuestionIsAnswered={currentQuestionIsAnswered}
-              options={options}
-              question={data.questions[currentQuestionIndex]}
-            />
-          )}
-
-          {questionType === "TEXT" && (
-            <ButtonOptions
-              currentQuestionIndex={currentQuestionIndex}
-              chooseAnswer={chooseAnswer}
-              userAnswers={userAnswers}
-              revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-              currentQuestionIsAnswered={currentQuestionIsAnswered}
-              options={options}
-              question={data.questions[currentQuestionIndex]}
-            />
-          )}
-        </motion.div>
-      </div>
-      <div className={styles.footer}>
-        <div>
-          <PhoneLink />
-        </div>
-        <div>
-          <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
-        </div>
-        <div className={styles.skip_button_wrapper}>
-          <button
-            aria-label="Skip"
-            className={styles.skip_button}
-            onClick={skipQuestion}
+      {isLoading && (
+        <div className={styles.loading}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="38"
+            height="38"
+            viewBox="0 0 38 38"
           >
-            SKIP
-          </button>
+            <defs>
+              <linearGradient
+                id="a"
+                x1="8.042%"
+                x2="65.682%"
+                y1="0%"
+                y2="23.865%"
+              >
+                <stop offset="0%" stopColor="currentColor" stopOpacity="0"></stop>
+                <stop
+                  offset="63.146%"
+                  stopColor="currentColor"
+                  stopOpacity="0.631"
+                ></stop>
+                <stop offset="100%" stopColor="currentColor"></stop>
+              </linearGradient>
+            </defs>
+            <g fill="none" fillRule="evenodd" transform="translate(1 1)">
+              <path
+                stroke="url(#a)"
+                strokeWidth="2"
+                d="M36 18c0-9.94-8.06-18-18-18"
+              >
+                <animateTransform
+                  attributeName="transform"
+                  dur="0.9s"
+                  from="0 18 18"
+                  repeatCount="indefinite"
+                  to="360 18 18"
+                  type="rotate"
+                ></animateTransform>
+              </path>
+              <circle cx="36" cy="18" r="1" fill="currentColor">
+                <animateTransform
+                  attributeName="transform"
+                  dur="0.9s"
+                  from="0 18 18"
+                  repeatCount="indefinite"
+                  to="360 18 18"
+                  type="rotate"
+                ></animateTransform>
+              </circle>
+            </g>
+          </svg>
         </div>
-      </div>
+      )}
+      {!isLoading && (
+        <>
+          <div className={styles.card_upper}>
+            <div className={styles.header}>
+              <span className={styles.icon}>WORD COACH</span>
+              <Score scoreList={scoreList} />
+            </div>
+            <motion.div
+              key={currentQuestionIndex}
+              transition={{ duration: 1, type: "tween" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: -20 }}
+            >
+              <p className={styles.question}>{question}</p>
+              {questionType === "IMAGE" && (
+                <ImageOptions
+                  currentQuestionIndex={currentQuestionIndex}
+                  chooseAnswer={chooseAnswer}
+                  userAnswers={userAnswers}
+                  revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+                  currentQuestionIsAnswered={currentQuestionIsAnswered}
+                  options={options}
+                  question={data.questions[currentQuestionIndex]}
+                />
+              )}
+
+              {questionType === "TEXT" && (
+                <ButtonOptions
+                  currentQuestionIndex={currentQuestionIndex}
+                  chooseAnswer={chooseAnswer}
+                  userAnswers={userAnswers}
+                  revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+                  currentQuestionIsAnswered={currentQuestionIsAnswered}
+                  options={options}
+                  question={data.questions[currentQuestionIndex]}
+                />
+              )}
+            </motion.div>
+          </div>
+          <div className={styles.footer}>
+            <div>
+              <PhoneLink />
+            </div>
+            <div>
+              <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
+            </div>
+            <div className={styles.skip_button_wrapper}>
+              <button
+                aria-label="Skip"
+                className={styles.skip_button}
+                onClick={skipQuestion}
+              >
+                SKIP
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

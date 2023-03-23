@@ -49,6 +49,7 @@
   "dependencies": {
     "framer-motion": "^10.8.5",
     "prop-types": "^15.7.2",
+    "react-content-loader": "^6.2.1",
     "word-coach-common": "workspace:*"
   },
   "peerDependencies": {

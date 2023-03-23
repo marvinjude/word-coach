@@ -6,14 +6,15 @@ const THEME_ELEMENT_ID = "theme-for-word-coach"
 export type Themes = keyof typeof themes
 
 /**
+ * Use this if there are other ways you'd want to utilize the theme string
  * @param themeKey - key of theme to be injected
  * @example
  * const themeString = getThemeString("nigeria")
  * // --primary: #0000  --secondary: #0000 ...
  * @returns
  */
-export function getThemeString(themeKey: Themes) {
-  const themeObject = themes[themeKey] || themes[DEFAULT_THEME]
+export function getThemeString(themeKey: Themes = DEFAULT_THEME) {
+  const themeObject = themes[themeKey]
   const themeString = Object.keys(themeObject)
     .map(key => {
       return `--${key}: ${themeObject[key as keyof typeof themeObject]}`
@@ -23,14 +24,17 @@ export function getThemeString(themeKey: Themes) {
   return themeString
 }
 /**
- * @param themeKey - key of theme to be injected
+ * Instead of putting a 'style' tag into the document head with the theme,
+ * this function injects the into into the style property of the specified element so that it's children can inherit the theme
  * @param element - element to be injected with theme
+ * @param themeKey - key of theme to be injected
  */
 export function injectThemeIntoElement(
-  themeKey: Themes = "nigeria",
-  element: HTMLElement
+  element: HTMLElement,
+  themeKey: Themes = DEFAULT_THEME
 ): void {
-  const themeObject = themes[themeKey] || themes[DEFAULT_THEME]
+  const themeObject = themes[themeKey]
+
   Object.keys(themeObject).forEach(key => {
     element.style.setProperty(
       `--${key}`,
@@ -40,9 +44,12 @@ export function injectThemeIntoElement(
 }
 
 /**
+ * Injects a style tag into document head with the specified theme
  * @param themeKey - key of theme to be injected
  */
-export function injectThemeElement(themeKey: Themes): void {
+export function injectStyleTagWithThemeVars(
+  themeKey: Themes = DEFAULT_THEME
+): void {
   const style = document.createElement("style")
   style.setAttribute("data-theme", "theme-for-word-coach")
   document.head.appendChild(style)
@@ -56,9 +63,9 @@ export function injectThemeElement(themeKey: Themes): void {
 }
 
 /**
- * Removes theme element from DOM
+ * Removes theme element previously injected into DOM by injectStyleTagWithThemeVars()
  */
-export function removeThemeElement(): void {
+export function removeStyleTagWithThemeVars(): void {
   const element = document.querySelector(`[data-theme=${THEME_ELEMENT_ID}]`)
   if (element) {
     element.remove()
@@ -66,8 +73,12 @@ export function removeThemeElement(): void {
 }
 
 /**
+ * Concatenates class names based on conditionals
  * @param baseClassName - base class name
  * @param conditionals - object with class names as keys and boolean values
+ * @example
+ * const className = classNames("base-class", { "class-1": true, "class-2": false })
+ * // "base-class class-1"
  * @returns
  */
 export function classNames(

@@ -1,8 +1,8 @@
 export {
-  injectThemeElement,
+  injectStyleTagWithThemeVars,
   getThemeString,
   injectThemeIntoElement,
-  removeThemeElement,
+  removeStyleTagWithThemeVars,
   classNames,
   shuffleArray,
 } from "./utils"

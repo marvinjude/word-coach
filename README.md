@@ -62,6 +62,7 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 
 ## Todo
 
+- Add  shimmer effect to component
 - Build the rest of the component
 
 - Write test with playright

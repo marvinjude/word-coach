@@ -38,8 +38,8 @@
   border: var(--containerBorder);
   border-radius: 10px;
   overflow: hidden;
-  width: 390px;
-  min-height: 250px;
+  min-width: 390px;
+  min-height: 265px;
   position: relative;
   text-align: center;
   box-shadow: -2px -4px 2.2px rgb(0 0 0 / 3%), 0 6.7px 5.3px rgb(0 0 0 / 5%),
@@ -247,4 +247,24 @@
   font-size: 0.9rem;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+.accordion-group {
+  border: 1px solid red;
+}
+.accordion {
+}
+
+.accordion-inner {
+}
+
+.accordion-left {
 }
