@@ -62,14 +62,15 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 
 ## Todo
 
-- Design loading state ✓
-- Game ended page
-- Write test with playright
-- Design example app 
-- Make example app that generates questions using chatGPT
-- General cleanup
-- TS type for css & svg
-- Docs around vue and how it's not ready yet
-- Other docs 
-- Simple Codesandbox example
-- Ship to NPM
+- [x] Design loading state ✓
+- [x] Game ended page ✓
+
+- [x] General cleanup 
+- [x] Cleanup themes
+- [x] Write test with playright
+- [x] Design example app that generates questions using chatGPT
+- [x] TS type for css & svg
+- [x] Docs around vue and how it's not ready yet
+- [x] Other docs 
+- [x] Simple Codesandbox example
+- [x] Ship to NPM
