@@ -1,24 +1,19 @@
-import * as React from "react"
-import Button from "./Button"
-import Score from "./Score"
-import AccordionItem from "./Accordion"
-import Progress from "./Progress"
-
-import styles from "word-coach-common/styles/styles.css"
+import React, { useContext } from "react"
+import Button from "../components/Button"
+import Score from "../components/Score"
+import AccordionItem from "../components/Accordion"
+import Progress from "../components/Progress"
 
 import Cross from "word-coach-common/icons/cross.svg"
 import Check from "word-coach-common/icons/check.svg"
 import QuestionMark from "word-coach-common/icons/question-mark.svg"
 
-import { WordCoachProps, UserAnswers } from ".."
-import callbackCaller from "../utils/callbackCaller"
+import styles from "word-coach-common/styles/styles.css"
 
-interface EndScreenProps {
-  data: WordCoachProps["data"]
-  userAnswers: UserAnswers
-  hasNextRound: boolean
-  onClickNextRound: WordCoachProps["onClickNextRound"]
-}
+import callbackCaller from "../utils/callbackCaller"
+import { AppContext } from "../context"
+
+import type { AppContextType, ImageOption, TextOption } from "../types"
 
 const ImageWithHint: React.FC<{
   url: string
@@ -61,13 +56,17 @@ const ImageWithHint: React.FC<{
   )
 }
 
-const EndScreen: React.FC<EndScreenProps> = ({
-  data,
-  userAnswers,
-  hasNextRound,
-  onClickNextRound,
-}) => {
-  const correctAnswerCount = data.questions.reduce((prev, cur, index) => {
+const EndScreen = () => {
+  const {
+    questions,
+    hasNextRound,
+    onClickNextRound,
+    userAnswers,
+    setUserAnswers,
+    setScreen,
+  } = useContext(AppContext) as AppContextType
+
+  const correctAnswerCount = questions.reduce((prev, cur, index) => {
     const answerForQuestionIsCorrrect = cur.answer.includes(userAnswers[index])
     if (answerForQuestionIsCorrrect) {
       return prev + 1
@@ -75,10 +74,12 @@ const EndScreen: React.FC<EndScreenProps> = ({
     return prev
   }, 0)
 
-  const percentageCorrect = (correctAnswerCount / data.questions.length) * 100
+  const percentageCorrect = (correctAnswerCount / questions.length) * 100
 
-  const hanldleClickNextRound = () => {
+  const handleClickNextRound = () => {
     callbackCaller(onClickNextRound)
+    setScreen("game")
+    setUserAnswers({})
   }
 
   return (
@@ -86,7 +87,7 @@ const EndScreen: React.FC<EndScreenProps> = ({
       <div style={{ display: "flex", marginBottom: "1.5rem" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Progress percentage={percentageCorrect}>
-            {correctAnswerCount}/{data.questions.length}
+            {correctAnswerCount}/{questions.length}
           </Progress>
           <div
             style={{
@@ -121,7 +122,7 @@ const EndScreen: React.FC<EndScreenProps> = ({
       >
         <p style={{ margin: 0 }}>Explanations</p>
         {hasNextRound && (
-          <Button onClick={hanldleClickNextRound} state="right">
+          <Button onClick={handleClickNextRound} state="right">
             Next Round
           </Button>
         )}
@@ -137,8 +138,9 @@ const EndScreen: React.FC<EndScreenProps> = ({
         }}
         className={styles.accordion_group}
       >
-        {data.questions.map((question, questionIndex) => (
+        {questions.map((question, questionIndex) => (
           <AccordionItem
+            key={questionIndex}
             title={question.question}
             icon={() =>
               userAnswers[questionIndex] === undefined ? (
@@ -171,8 +173,9 @@ const EndScreen: React.FC<EndScreenProps> = ({
                       gap: "0.8rem",
                     }}
                   >
-                    {question.options.map(({ text }, optionIndex) => (
+                    {question.options.map((option, optionIndex) => (
                       <div
+                        key={optionIndex}
                         style={{
                           display: "flex",
                           alignItems: "center",
@@ -188,7 +191,7 @@ const EndScreen: React.FC<EndScreenProps> = ({
                             <Cross />
                           )}
                         </span>
-                        {text}
+                        {(option as TextOption).text}
                       </div>
                     ))}
                   </div>
@@ -197,9 +200,10 @@ const EndScreen: React.FC<EndScreenProps> = ({
               {/* Image type */}
               {question.type === "IMAGE" && (
                 <div style={{ display: "flex", gap: "1rem" }}>
-                  {question.options.map(({ url }, optionIndex) => (
+                  {question.options.map((option, optionIndex) => (
                     <ImageWithHint
-                      url={url}
+                      key={optionIndex}
+                      url={(option as ImageOption).url}
                       hint={() =>
                         question.answer.includes(optionIndex) ? (
                           <Check />
@@ -223,8 +227,8 @@ const EndScreen: React.FC<EndScreenProps> = ({
                   <div style={{ fontWeight: "bold", paddingBottom: "1rem" }}>
                     LEARN WHY
                   </div>
-                  {question.whyAnswer.map(({ heading, text }) => (
-                    <div>
+                  {question.whyAnswer.map(({ heading, text }, index) => (
+                    <div key={index}>
                       <div>{heading}</div>
                       <div
                         style={{ padding: "0.5rem 0 1rem 0", color: "gray" }}

@@ -6,7 +6,7 @@ import Cross from "word-coach-common/icons/cross.svg"
 import Check from "word-coach-common/icons/check.svg"
 import styles from "word-coach-common/styles/styles.css"
 
-import type { ImageOption, OptionsUI } from ".."
+import type { ImageOption, OptionsUI } from "../types"
 
 const ImageOptions: React.FC<OptionsUI> = ({
   currentQuestionIndex,

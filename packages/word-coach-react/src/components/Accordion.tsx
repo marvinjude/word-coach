@@ -1,4 +1,4 @@
-import React, { Children } from "react"
+import React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import styles from "word-coach-common/styles/styles.css"

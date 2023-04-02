@@ -7,8 +7,7 @@ interface ScoreProps {
 }
 
 /**
- *
- * @param scoreList - An array that usually contain 1 or 2 elements. The array is used to apply some entry/exit animation to each score.
+ * @param scoreList - An array that usually contains current user score or the current user score and previous score. The array is used to apply some entry/exit animation to each score.
  * @returns
  */
 const Score: React.FC<ScoreProps> = ({ scoreList }) => {

@@ -2,7 +2,7 @@ import React, { Fragment } from "react"
 import Image from "./Image"
 import Button from "./Button"
 import styles from "word-coach-common/styles/styles.css"
-import type { TextOption, OptionsUI } from ".."
+import type { TextOption, OptionsUI } from "../types"
 
 const ButtonOptions: React.FC<OptionsUI> = ({
   currentQuestionIndex,
