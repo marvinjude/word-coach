@@ -62,8 +62,8 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 
 ## Todo
 
-- [] Design loading state ✓
-- [] Game ended page ✓
+- [ ] Design loading state ✓
+- [ ] Game ended page ✓
 
 - [x] General cleanup 
 - [x] Cleanup themes
