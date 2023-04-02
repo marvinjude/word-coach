@@ -1,1 +1,0 @@
-export { WordCoach } from "./WordCoach"

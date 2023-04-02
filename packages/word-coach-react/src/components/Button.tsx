@@ -10,14 +10,17 @@ interface ButtonProps {
   onClick: () => void
   children?: React.ReactNode
   state: "right" | "wrong" | "default"
+  showIcon?: boolean
+  full?: boolean
 }
 
 const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
-  const { onClick, children, state } = props
+  const { onClick, children, state, showIcon = false, full = false } = props
 
   const buttonClassNames = classNames(styles.button, {
     [styles["button--right"]]: state === "right",
     [styles["button--wrong"]]: state === "wrong",
+    [styles["button--full"]]: full,
   })
 
   return (
@@ -27,14 +30,14 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
       onClick={onClick}
       autoFocus
     >
-      {state === "right" || state === "wrong" ? (
+      {showIcon && (state === "right" || state === "wrong") ? (
         <motion.span
           role="img"
           animate={{ marginRight: "10px" }}
           aria-label="right"
         >
-          {state == "right" ? <Check /> : null}
-          {state == "wrong" ? <Cross /> : null}
+          {state == "right" && <Check /> }
+          {state == "wrong" && <Cross /> }
         </motion.span>
       ) : null}
 

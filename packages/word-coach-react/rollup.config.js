@@ -8,7 +8,7 @@ import typescript from "@rollup/plugin-typescript"
 import svgr from "@svgr/rollup"
 
 export default {
-  input: "./src/index.ts",
+  input: "./src/index.tsx",
   external: ["react", "lodash.shuffle", "framer-motion"],
   plugins: [
     /**Okay! We wouldn't really wan't styles in our common package to conflict with styles in the application where the WordCoach component will be used that's why we are using css modules here */

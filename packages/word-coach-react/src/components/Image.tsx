@@ -7,6 +7,9 @@ interface ImageProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
+/**
+ * An Clickable Image with wrapper and optional children
+ */
 const Image: React.FC<ImageProps> = ({
   children,
   url,
@@ -16,7 +19,7 @@ const Image: React.FC<ImageProps> = ({
   return (
     <div className={styles.image_wrapper} onClick={onClick} {...props}>
       <img className={styles.image} src={url} />
-      <div className={styles.image_inner}>{children}</div>
+      {children && <div className={styles.image_inner}>{children}</div>}
     </div>
   )
 }

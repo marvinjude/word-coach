@@ -6,7 +6,7 @@ interface ImageOverlayProps {
   children?: React.ReactNode
 }
 
-const ImageOverlay: React.FC<ImageOverlayProps> = ({ children }) => {
+const WobbleChild: React.FC<ImageOverlayProps> = ({ children }) => {
   return (
     <div className={styles.image_cover}>
       <motion.div
@@ -28,4 +28,4 @@ const ImageOverlay: React.FC<ImageOverlayProps> = ({ children }) => {
   )
 }
 
-export default ImageOverlay
+export default WobbleChild

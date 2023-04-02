@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useMemo } from "react"
+import React, { useLayoutEffect, useRef, useState, useMemo } from "react"
 import { motion } from "framer-motion"
 
 import Highlights from "./components/Highlights"
@@ -14,15 +14,20 @@ import {
   removeStyleTagWithThemeVars,
   shuffleArray as shuffle,
 } from "word-coach-common"
+
 import type { Themes } from "word-coach-common"
 import styles from "word-coach-common/styles/styles.css"
 import PhoneLink from "word-coach-common/icons/phone-link.svg"
+import Spinner from "word-coach-common/icons/spinner.svg"
+import EndScreen from "./components/EndScreen"
 
 export type UserAnswers = {
   [key: string]: number
 }
 
 type QuestionType = "IMAGE" | "TEXT"
+
+export type Option = TextOption | ImageOption
 
 export interface TextOption {
   text: string
@@ -31,8 +36,6 @@ export interface TextOption {
 export interface ImageOption {
   url: string
 }
-
-export type Option = TextOption | ImageOption
 
 export interface IQuestion {
   /**
@@ -94,9 +97,29 @@ export interface IQuestion {
    * @default 0
    */
   score: number
+
+  /**
+   * List of explanations about why the actual answer is correct
+   */
+  whyAnswer?: Array<{
+    heading: string
+    text: string
+  }>
 }
 
-interface WordCoachProps {
+export interface WordCoachProps {
+  /**
+   * Whether to show a "Next Round" button at the end of the quiz
+   * @default false
+   */
+  hasNextRound: boolean
+
+  /**
+   * Fired when user clicks the "Next Round" button.
+   * Here, you can fetch more quiz data and probably put the UI in loading state with the `isLoading` prop while you're at it
+   */
+  onClickNextRound?: () => void
+
   /**
    * Whether to show a loading state, useful when fetching data from an API
    * @default false
@@ -110,7 +133,8 @@ interface WordCoachProps {
   revealAnswerOnSkip?: boolean
 
   /**
-   * Theme to be used, defaults to "nigeria", CSS variables for corresponding them is injected into the DOM
+   * Theme to be used, defaults to "nigeria"
+   * CSS variables for corresponding theme is injected into the DOM
    * @default "nigeria"
    */
   theme?: Themes
@@ -169,8 +193,25 @@ interface WordCoachProps {
   }
 }
 
+export interface OptionsUI {
+  currentQuestionIndex: number
+  onChooseAnswer: (index: number) => void
+  userAnswers: UserAnswers
+  revealRightAndWrongAnswer: boolean
+  currentQuestionIsAnswered: boolean
+  options: IQuestion["options"]
+  question: IQuestion
+}
+
 const MAX_NUMBER_OF_OPTION = 2
-const DELAY_BEFORE_NEXT_QUESTION = 1200
+const DELAY_BEFORE_NEXT = 1200
+
+const delay = (f: () => any) => {
+  const timeout = setTimeout(() => {
+    clearTimeout(timeout)
+    f()
+  }, DELAY_BEFORE_NEXT)
+}
 
 const WordCoach: React.FC<WordCoachProps> = ({
   theme,
@@ -179,6 +220,8 @@ const WordCoach: React.FC<WordCoachProps> = ({
   enableShuffle = false,
   onSelectAnswer,
   isLoading = false,
+  hasNextRound = false,
+  onClickNextRound,
   ...props
 }) => {
   // Memoise the shuffled question so we don't reshuffle on rerender
@@ -193,23 +236,27 @@ const WordCoach: React.FC<WordCoachProps> = ({
   const [scoreList, setScoreList] = useState([{ value: 0, id: Date.now() }])
   const [userAnswers, setUserAnswers] = useState<UserAnswers>({})
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [gameEnded, setGameEnded] = useState(false)
   const [revealRightAndWrongAnswer, setRevealRightAndWrongAnswer] =
     useState(false)
+  const skippedQuestionsIndex = useRef<string[]>([])
 
   const {
     options,
     question,
     type: questionType,
   } = data.questions[currentQuestionIndex]
-  const questionsLength = data.questions.length - 1
-  const isLastQuestion = currentQuestionIndex === questionsLength
+
+  // Compute value
+  const isLastQuestion = currentQuestionIndex === data.questions.length - 1
   const currentQuestionIsAnswered = String(currentQuestionIndex) in userAnswers
-  const isLastQuestionAnswered = questionsLength in userAnswers
+  const currendQuestionIsSkipped = skippedQuestionsIndex.current.includes(
+    currentQuestionIndex.toString()
+  )
 
   /** Warnings: Just making sure your data shape is correct
    *  TODO: Replace with PropTypes
    */
-
   if (options.length > MAX_NUMBER_OF_OPTION) {
     if (isDev) {
       throw new Error(`WordCoach: The maximum number of options is 2.`)
@@ -226,31 +273,45 @@ const WordCoach: React.FC<WordCoachProps> = ({
   })
   // End of warnings
 
-  const nextQuestion = () => {
-    if (!isLastQuestion) {
-      const timeout = setTimeout(() => {
-        setCurrentQuestionIndex(prev => prev + 1)
+  const gotoNextQuestion = () => {
+    delay(() => {
+      setCurrentQuestionIndex(prev => prev + 1)
+      setRevealRightAndWrongAnswer(false)
+    })
+  }
 
-        setRevealRightAndWrongAnswer(false)
-
-        clearTimeout(timeout)
-      }, DELAY_BEFORE_NEXT_QUESTION)
-    }
+  const gotoGameEndScreen = () => {
+    delay(() => {
+      setGameEnded(true)
+    })
   }
 
   const skipQuestion = () => {
+    // Prevent skipping when current question is already skipped / answered
+    if (currentQuestionIsAnswered || currendQuestionIsSkipped) return
+
+    skippedQuestionsIndex.current.push(currentQuestionIndex.toString())
+
     setRevealRightAndWrongAnswer(true)
-    nextQuestion()
+
+    if (isLastQuestion) {
+      callbackCaller(onEnd, { answers: userAnswers, score: scoreList[0] })
+      gotoGameEndScreen()
+    } else {
+      gotoNextQuestion()
+    }
   }
 
-  const chooseAnswer = (index: number) => {
-    if (currentQuestionIsAnswered) return
+  const onChooseAnswer = (optionIndex: number) => {
+    // Prevent skipping when current question is already skipped / answered
+    if (currentQuestionIsAnswered || currendQuestionIsSkipped) return
 
     const answerIsCorrect =
-      data.questions[currentQuestionIndex].answer.includes(index)
+      data.questions[currentQuestionIndex].answer.includes(optionIndex)
 
     const scoreForQuestion =
       data.questions[currentQuestionIndex].score || defaultScore || 1
+
     const newScore = answerIsCorrect
       ? scoreList[0].value + scoreForQuestion
       : scoreList[0].value
@@ -259,24 +320,25 @@ const WordCoach: React.FC<WordCoachProps> = ({
       setScoreList([{ value: newScore, id: Date.now() }])
 
     callbackCaller(onSelectAnswer, {
-      answerIndex: index,
+      answerIndex: optionIndex,
       questionIndex: currentQuestionIndex,
       currentScore: newScore,
     })
 
     setUserAnswers(prev => ({
       ...prev,
-      [currentQuestionIndex]: index,
+      [currentQuestionIndex]: optionIndex,
     }))
 
-    nextQuestion()
+    if (!isLastQuestion) {
+      gotoNextQuestion()
+    } else {
+      gotoGameEndScreen()
+      callbackCaller(onEnd, { answers: userAnswers, score: scoreList[0] })
+    }
   }
 
-  if (isLastQuestionAnswered) {
-    callbackCaller(onEnd, { answers: userAnswers, score: scoreList[0] })
-  }
-
-  const dots = data.questions.map((_, questionIndex) => {
+  const highlightDots = data.questions.map((_, questionIndex) => {
     const hasSelectedAnswer = String(questionIndex) in userAnswers
     const answerIndexSelected = userAnswers[questionIndex.toString()]
     const selectedAnswerIsCorrect =
@@ -289,7 +351,7 @@ const WordCoach: React.FC<WordCoachProps> = ({
   })
 
   /**
-   * This lets us inject theme variable into the DOM based on the selected theme
+   * Inject theme variable into the DOM based on the selected theme
    */
   useLayoutEffect(() => {
     injectStyleTagWithThemeVars(theme)
@@ -299,112 +361,80 @@ const WordCoach: React.FC<WordCoachProps> = ({
     }
   }, [])
 
+  if (gameEnded)
+    return (
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <span className={styles.icon}>WORD COACH</span>
+         
+        </div>
+        {gameEnded && !isLoading && (
+          <EndScreen
+            data={props.data}
+            userAnswers={userAnswers}
+            hasNextRound={hasNextRound}
+            onClickNextRound={onClickNextRound}
+          />
+        )}
+      </div>
+    )
+
   return (
     <div className={styles.card}>
       {isLoading && (
         <div className={styles.loading}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="38"
-            height="38"
-            viewBox="0 0 38 38"
-          >
-            <defs>
-              <linearGradient
-                id="a"
-                x1="8.042%"
-                x2="65.682%"
-                y1="0%"
-                y2="23.865%"
-              >
-                <stop
-                  offset="0%"
-                  stopColor="currentColor"
-                  stopOpacity="0"
-                ></stop>
-                <stop
-                  offset="63.146%"
-                  stopColor="currentColor"
-                  stopOpacity="0.631"
-                ></stop>
-                <stop offset="100%" stopColor="currentColor"></stop>
-              </linearGradient>
-            </defs>
-            <g fill="none" fillRule="evenodd" transform="translate(1 1)">
-              <path
-                stroke="url(#a)"
-                strokeWidth="2"
-                d="M36 18c0-9.94-8.06-18-18-18"
-              >
-                <animateTransform
-                  attributeName="transform"
-                  dur="0.9s"
-                  from="0 18 18"
-                  repeatCount="indefinite"
-                  to="360 18 18"
-                  type="rotate"
-                ></animateTransform>
-              </path>
-              <circle cx="36" cy="18" r="1" fill="currentColor">
-                <animateTransform
-                  attributeName="transform"
-                  dur="0.9s"
-                  from="0 18 18"
-                  repeatCount="indefinite"
-                  to="360 18 18"
-                  type="rotate"
-                ></animateTransform>
-              </circle>
-            </g>
-          </svg>
+          <Spinner />
         </div>
       )}
-      {!isLoading && (
-        <>
-          <div className={styles.card_upper}>
-            <div className={styles.header}>
-              <span className={styles.icon}>WORD COACH</span>
-              <Score scoreList={scoreList} />
-            </div>
-            <motion.div
-              key={currentQuestionIndex}
-              transition={{ duration: 1, type: "tween" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: -20 }}
-            >
-              <p className={styles.question}>{question}</p>
-              {questionType === "IMAGE" && (
-                <ImageOptions
-                  currentQuestionIndex={currentQuestionIndex}
-                  chooseAnswer={chooseAnswer}
-                  userAnswers={userAnswers}
-                  revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-                  currentQuestionIsAnswered={currentQuestionIsAnswered}
-                  options={options}
-                  question={data.questions[currentQuestionIndex]}
-                />
-              )}
 
-              {questionType === "TEXT" && (
-                <ButtonOptions
-                  currentQuestionIndex={currentQuestionIndex}
-                  chooseAnswer={chooseAnswer}
-                  userAnswers={userAnswers}
-                  revealRightAndWrongAnswer={revealRightAndWrongAnswer}
-                  currentQuestionIsAnswered={currentQuestionIsAnswered}
-                  options={options}
-                  question={data.questions[currentQuestionIndex]}
-                />
-              )}
-            </motion.div>
+      {!isLoading && !gameEnded && (
+        <>
+          <div className={styles.header}>
+            <span className={styles.icon}>WORD COACH</span>
+            <Score scoreList={scoreList} />
           </div>
+          <motion.div
+            className={styles.card_middle}
+            key={currentQuestionIndex}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            initial={{ opacity: -200 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: -200 }}
+          >
+            <p className={styles.question}>{question}</p>
+            {questionType === "IMAGE" && (
+              <ImageOptions
+                currentQuestionIndex={currentQuestionIndex}
+                onChooseAnswer={onChooseAnswer}
+                userAnswers={userAnswers}
+                revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+                currentQuestionIsAnswered={currentQuestionIsAnswered}
+                options={options}
+                question={data.questions[currentQuestionIndex]}
+              />
+            )}
+
+            {questionType === "TEXT" && (
+              <ButtonOptions
+                currentQuestionIndex={currentQuestionIndex}
+                onChooseAnswer={onChooseAnswer}
+                userAnswers={userAnswers}
+                revealRightAndWrongAnswer={revealRightAndWrongAnswer}
+                currentQuestionIsAnswered={currentQuestionIsAnswered}
+                options={options}
+                question={data.questions[currentQuestionIndex]}
+              />
+            )}
+          </motion.div>
           <div className={styles.footer}>
             <div>
               <PhoneLink />
             </div>
             <div>
-              <Highlights dots={dots} selectedDotIndex={currentQuestionIndex} />
+              <Highlights
+                dots={highlightDots}
+                selectedDotIndex={currentQuestionIndex}
+              />
             </div>
             <div className={styles.skip_button_wrapper}>
               <button

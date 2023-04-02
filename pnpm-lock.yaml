@@ -137,7 +137,7 @@ importers:
       '@vitejs/plugin-vue-jsx': 3.0.0_vite@4.2.0+vue@3.2.47
       vite: 4.2.0
 
-  openAI:
+  examples/openAI:
     specifiers:
       openai: ^3.2.1
     dependencies:
@@ -154,14 +154,13 @@ importers:
       tslib: ^2.5.0
       typescript: ^4.5.4
       typescript-plugin-css-modules: ^4.2.3
-    dependencies:
+    devDependencies:
       '@rollup/plugin-babel': 6.0.3_rollup@3.19.1
       '@rollup/plugin-typescript': 8.5.0_6xpx4ownnv75244cfyuvoru6ci
-      rollup: 3.19.1
-      rollup-plugin-sass: 1.12.19_rollup@3.19.1
-    devDependencies:
       del-cli: 5.0.0
+      rollup: 3.19.1
       rollup-plugin-copy: 3.4.0
+      rollup-plugin-sass: 1.12.19_rollup@3.19.1
       tslib: 2.5.0
       typescript: 4.9.5
       typescript-plugin-css-modules: 4.2.3_typescript@4.9.5
@@ -2917,6 +2916,7 @@ packages:
       '@babel/helper-module-imports': 7.18.6
       '@rollup/pluginutils': 5.0.2_rollup@3.19.1
       rollup: 3.19.1
+    dev: true
 
   /@rollup/plugin-commonjs/24.0.1_rollup@3.19.1:
     resolution: {integrity: sha512-15LsiWRZk4eOGqvrJyu3z3DaBu5BhXIMeWnijSRvd8irrrg9SHpQ1pH+BUK4H6Z9wL9yOxZJMTLU+Au86XHxow==}
@@ -3009,6 +3009,7 @@ packages:
       rollup: 3.19.1
       tslib: 2.5.0
       typescript: 4.9.5
+    dev: true
 
   /@rollup/pluginutils/3.1.0_rollup@2.79.1:
     resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
@@ -3032,6 +3033,7 @@ packages:
       estree-walker: 1.0.1
       picomatch: 2.3.1
       rollup: 3.19.1
+    dev: true
 
   /@rollup/pluginutils/4.2.1:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -8051,6 +8053,7 @@ packages:
 
   /immutable/4.3.0:
     resolution: {integrity: sha512-0AOCmOip+xgJwEVTQj1EfiDDOkPmuyllDuTuEX+DDXUgapLAsBIfkg3sxCYyCEA8mQqZrrxPUGjcOQ2JS3WLkg==}
+    dev: true
 
   /import-cwd/2.1.0:
     resolution: {integrity: sha512-Ew5AZzJQFqrOV5BTW3EIoHAnoie1LojZLXKcCQ/yTRyVZosBhK1x1ViYjHGf5pAFOq8ZyChZp6m/fSN7pJyZtg==}
@@ -12961,7 +12964,7 @@ packages:
       sass: 1.59.3
     transitivePeerDependencies:
       - rollup
-    dev: false
+    dev: true
 
   /rollup-plugin-terser/7.0.2_rollup@2.79.1:
     resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
@@ -13092,6 +13095,7 @@ packages:
       chokidar: 3.5.3
       immutable: 4.3.0
       source-map-js: 1.0.2
+    dev: true
 
   /sax/1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
@@ -14229,6 +14233,7 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
 
   /uglify-js/3.17.4:
     resolution: {integrity: sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==}

@@ -12,13 +12,16 @@
     border-style: solid;
   }
 
+  & img {
+    -moz-force-broken-image-icon: 0;
+  }
+
   & button {
     font-family: inherit;
     font-size: 100%;
     line-height: 1.15;
     text-transform: none;
     cursor: pointer;
-    padding: 0;
     line-height: inherit;
   }
 
@@ -36,7 +39,6 @@
   background-color: var(--containerBackground);
   color: var(--containerForeground);
   border: var(--containerBorder);
-  border-radius: 10px;
   overflow: hidden;
   width: 390px;
   min-height: 265px;
@@ -48,8 +50,9 @@
   display: flex;
   flex-direction: column;
 
-  .card_upper {
+  .card_middle {
     padding: 1.2rem;
+    padding-top: 0;
     flex: 1;
   }
 }
@@ -57,9 +60,9 @@
 .header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
   font-size: 0.875rem;
   align-items: center;
+  padding: 1rem 1rem 0.2rem 1rem;
 
   & .icon {
     font-weight: bold;
@@ -129,18 +132,14 @@
   gap: 1rem;
 }
 
-.button_group {
-  flex: 1 1 0;
-}
-
 .button {
   display: flex;
   align-items: center;
   text-align: center;
   justify-content: center;
-  width: 100%;
+
   transition: all 0.3s ease-in-out;
-  padding: 0.6rem;
+  padding: 0.6rem 1.2rem 0.6rem 1.2rem;
   border-radius: 0.5rem;
   line-height: 1.5rem;
   cursor: pointer;
@@ -161,6 +160,10 @@
     background: var(--optionButtonRightBackground);
     color: var(--optionButtonRightText);
   }
+
+  &.button--full {
+    width: 100%;
+  }
 }
 
 .image_wrapper {
@@ -172,6 +175,7 @@
   overflow: hidden;
   position: relative;
   overflow: hidden;
+  background-color: #f5f5f5;
 
   &:focus {
     outline: none;
@@ -258,7 +262,6 @@
 }
 
 .accordion-group {
-  border: 1px solid red;
 }
 .accordion {
 }

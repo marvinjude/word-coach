@@ -29,7 +29,7 @@ export default {
     }),
     sass({
       output: "dist/styles.css",
-      include: ["src/*/*.scss"],
+      include: ["src/styles/*.scss"],
     }),
     babel({
       babelHelpers: "bundled",

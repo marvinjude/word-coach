@@ -62,19 +62,14 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 
 ## Todo
 
-- Add  shimmer effect to component
-- Build the rest of the component
-
+- Design loading state ✓
+- Game ended page
 - Write test with playright
-
-- Research if we can wire up with chatGPT to generate questions for an example app ✓
-- Design example app
+- Design example app 
 - Make example app that generates questions using chatGPT
-
-- Design loading state
 - General cleanup
 - TS type for css & svg
 - Docs around vue and how it's not ready yet
-- Other docs
+- Other docs 
 - Simple Codesandbox example
 - Ship to NPM
