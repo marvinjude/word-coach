@@ -1,7 +1,11 @@
 import { WordCoach } from "word-coach-react"
-import React from "react"
+import React, { useEffect } from "react"
 
-const questions = [
+import "./styles.css"
+
+console.log("WordCoach", WordCoach)
+
+const questionsDB = [
   {
     type: "TEXT",
     image:
@@ -123,18 +127,24 @@ const questions = [
 ]
 
 function App() {
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [questions, setQuestions] = React.useState<typeof questionsDB>([])
 
-  const goToNextRound = () => {
-    setIsLoading(true)
+  const fetchQuestions = async () => {
+    await new Promise(resolve => setTimeout(() => resolve(true), 2000))
 
-    setTimeout(() => setIsLoading(false), 2000)
+    setIsLoading(false)
+    setQuestions(questionsDB)
   }
+
+  useEffect(() => {
+    fetchQuestions()
+  }, [])
 
   return (
     <div
       style={{
-        background: "gold",
+        background: "green",
         display: "flex",
         minHeight: "100vh",
         alignItems: "center",
@@ -153,7 +163,7 @@ function App() {
         }}
       >
         <WordCoach
-          onClickNextRound={goToNextRound}
+          onClickNextRound={fetchQuestions}
           hasNextRound={true}
           isLoading={isLoading}
           defaultScore={10}

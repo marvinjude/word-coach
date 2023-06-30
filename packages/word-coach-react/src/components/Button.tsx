@@ -30,18 +30,28 @@ const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
       onClick={onClick}
       autoFocus
     >
-      {showIcon && (state === "right" || state === "wrong") ? (
-        <motion.span
-          role="img"
-          animate={{ marginRight: "10px" }}
-          aria-label="right"
-        >
-          {state == "right" && <Check /> }
-          {state == "wrong" && <Cross /> }
-        </motion.span>
-      ) : null}
-
-      {children}
+      <span
+        style={{
+          width: "100%",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          padding: `0.6rem 1.2rem 0.6rem 1.2rem`,
+        }}
+      >
+        {showIcon && (state === "right" || state === "wrong") ? (
+          <motion.span
+            style={{ display: "inline-block", verticalAlign: "top" }}
+            role="img"
+            animate={{ marginRight: "10px" }}
+            aria-label="right"
+          >
+            {state == "right" && <Check />}
+            {state == "wrong" && <Cross />}
+          </motion.span>
+        ) : null}
+        {children}
+      </span>
     </button>
   )
 }

@@ -17,20 +17,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
-    <div className={styles.accordion}>
+    <div className={styles.accordion_item}>
       <div
+        role="button"
         onClick={() => setIsOpen(open => !open)}
-        className={styles.accordion_button}
-        style={{
-          cursor: "pointer",
-          padding: "0.8rem",
-          borderTop: "1px solid black",
-          display: "flex",
-        }}
+        className={styles.accordion_item_button}
       >
-        <div style={{ flex: "1", display: "flex" }}>
-          <div style={{ marginRight: "0.5rem" }}>{icon()}</div>
-          <div style={{ textAlign: "left" }}>{title}</div>
+        <div className={styles.accordion_item_button_left}>
+          <div className={styles.accordion_item_button_left_icon}>{icon()}</div>
+          <div className={styles.accordion_item_button_left_title}>{title}</div>
         </div>
         <div>
           <motion.div
@@ -57,14 +52,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            style={{
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-              height: "0px",
-            }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: "0px", opacity: 0 }}
-            className={styles.accorion_inner}
+            className={styles.accordion_item_container}
           >
             {children}
           </motion.div>

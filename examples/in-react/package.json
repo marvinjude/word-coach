@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "word-coach-react": "workspace:*"
+    "word-coach-react": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

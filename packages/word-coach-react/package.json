@@ -1,10 +1,10 @@
 {
   "name": "word-coach-react",
-  "type": "module",
   "author": "Jude Agboola <marvinjudehk@gmail.com>",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
+  "unpkg": "dist/index.umd.js",
   "homepage": "https://github.com/marvinjude/word-coach/word-coach-react#readme",
   "bugs": "https://github.com/marvinjude/word-coach/issues",
   "keywords": [],
@@ -38,7 +38,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "postcss-preset-env": "^6.0.0",
     "react": "^18.0.0",
-    "rollup": "^3.0.0",
+    "rollup": "^3.7.3",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^2.0.0",
@@ -56,8 +56,8 @@
     "react": "^18.0.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production rollup -c rollup.config.js",
-    "watch": "rollup --config rollup.config.js --watch",
+    "build": "NODE_ENV=production rollup -c rollup.config.mjs",
+    "watch": "rollup --config rollup.config.mjs --watch",
     "clean": "del-cli dist/*"
   }
 }

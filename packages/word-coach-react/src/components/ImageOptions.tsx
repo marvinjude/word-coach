@@ -20,7 +20,6 @@ const ImageOptions: React.FC<OptionsUI> = ({
   return (
     <div className={styles.image_options_wrapper}>
       {options.map((option, index) => {
-        //TODO: Move to Util
         const thisOptionWasSelected =
           userAnswers[currentQuestionIndex] === index
 
@@ -35,7 +34,7 @@ const ImageOptions: React.FC<OptionsUI> = ({
           !thisOptionIsCorrectAnswer &&
           (revealRightAndWrongAnswer ||
             (currentQuestionIsAnswered && thisOptionWasSelected))
-        //
+
         return (
           <Fragment key={index}>
             <Image

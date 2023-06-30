@@ -1,0 +1,146 @@
+@tailwind base;
+:root {
+  --main-color-rgb: 212, 212, 224;
+  --unit: 4px;
+  --btn-size: 230px;
+  --offset: calc(var(--btn-size) / 10);
+}
+
+@property --border-x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --icon-bg-x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: -340px;
+}
+
+@property --border-rotation {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  margin: auto;
+  padding: var(--unit);
+  padding-left: calc(var(--unit) * 5);
+
+  border-radius: 99999px;
+  background: #006dff;
+  backdrop-filter: blur(5px);
+  transition: background 150ms ease;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+  transition: transform 150ms ease;
+}
+
+.btn__icon {
+  display: inline-flex;
+  padding: calc(var(--unit) * 2) calc(var(--unit) * 3);
+  margin-left: calc(var(--unit) * 3);
+}
+
+.btn__border {
+  position: absolute;
+  inset: 0;
+  border-radius: 99999px;
+  pointer-events: none;
+
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  border: 3px solid rgba(var(--main-color-rgb), 0.2);
+
+  background: conic-gradient(
+      from calc(var(--border-rotation) - 80deg) at var(--border-x) 22px,
+      rgba(var(--main-color-rgb), 0) 0%,
+      rgba(var(--main-color-rgb), 0.8) 30%,
+      rgba(177, 177, 177, 0) 45%
+    )
+    border-box;
+
+  animation: -0.64s border-rotation 6s linear infinite,
+    -0.64s border-x 6s linear infinite;
+}
+
+@keyframes border-x {
+  0% {
+    --border-x: var(--offset);
+  }
+  32.82275711% {
+    --border-x: var(--btn-size);
+  }
+  50% {
+    --border-x: var(--btn-size);
+  }
+  82.82275711% {
+    --border-x: var(--offset);
+  }
+  100% {
+    --border-x: var(--offset);
+  }
+}
+
+@keyframes border-rotation {
+  0% {
+    --border-rotation: 0deg;
+  }
+  32.82275711% {
+    --border-rotation: 0deg;
+  }
+  50% {
+    --border-rotation: 180deg;
+  }
+  82.82275711% {
+    --border-rotation: 180deg;
+  }
+  100% {
+    --border-rotation: 360deg;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Dank Mono";
+  src: url("./fonts/DankMono/Dank\ Mono\ Regular.otf") format("otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Dank Mono";
+  src: url("./fonts/DankMono/Dank\ Mono\ Italic.otf") format("otf");
+  font-weight: normal;
+  font-style: italic;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: white;
+}

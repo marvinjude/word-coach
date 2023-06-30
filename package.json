@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "lerna": "^6.5.1"
+  },
+  "engines": {
+    "node": "^18.0.0"
   }
 }

@@ -3,6 +3,7 @@ import Image from "./Image"
 import Button from "./Button"
 import styles from "word-coach-common/styles/styles.css"
 import type { TextOption, OptionsUI } from "../types"
+import { classNames } from "word-coach-common"
 
 const ButtonOptions: React.FC<OptionsUI> = ({
   currentQuestionIndex,
@@ -13,16 +14,23 @@ const ButtonOptions: React.FC<OptionsUI> = ({
   options,
   question,
 }) => {
+  const buttonOptionsWrapperRightClassNames = classNames(
+    styles.button_options_wrapper_right,
+    {
+      [styles.button_options_wrapper_right_full]: !question.image,
+      [styles.button_options_wrapper_right_half]: !!question.image,
+    }
+  )
+
   return (
     <div className={styles.button_options_wrapper}>
       {question.image && (
-        <div style={{ flex: "0 0 45%" }}>
+        <div className={styles.button_options_wrapper_left}>
           <Image url={question.image} />
         </div>
       )}
-      <div style={{ flex: "1" }}>
+      <div className={buttonOptionsWrapperRightClassNames}>
         {options.map((option, index) => {
-          //TODO: Move to Util
           const thisOptionWasSelected =
             userAnswers[currentQuestionIndex] === index
 
@@ -37,15 +45,12 @@ const ButtonOptions: React.FC<OptionsUI> = ({
             !thisOptionIsCorrectAnswer &&
             (revealRightAndWrongAnswer ||
               (currentQuestionIsAnswered && thisOptionWasSelected))
-          //
-          let state: "right" | "wrong" | "default" = "default"
 
-          if (right) {
-            state = "right"
-          }
-          if (wrong) {
-            state = "wrong"
-          }
+          let state: "right" | "wrong" | "default" = right
+            ? "right"
+            : wrong
+            ? "wrong"
+            : "default"
 
           return (
             <Fragment key={index}>
