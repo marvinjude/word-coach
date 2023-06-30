@@ -53,11 +53,27 @@ TODO: Write more details about contributing a package...
 Licensed under the [MIT License](https://github.com/marvinjude/word-coach/license.md)
 
 ## Todo
+
+### @word-coach/react
+
 - [ ] Design example app that generates questions using chatGPT
-- [ ] General cleanup 
+- [ ] General cleanup
 - [ ] Cleanup themes
 - [ ] Write test with playright
 - [ ] TS type for css & svg
-- [ ] Other docs 
+- [ ] Other docs
 - [ ] Simple Codesandbox example
 - [ ] Ship to NPM
+- [ ] Ship to NPM
+
+### @word-coach/ai-questions
+
+- [ ] Figure out how to stream questions
+- [ ] Modify and optimize prompt
+
+### wordcoach.xyz
+
+- [ ] Copy Code Feature
+  - [ ] React
+  - [ ] Web Component
+- [ ] Open on CodeSandbox
