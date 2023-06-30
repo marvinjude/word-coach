@@ -2,7 +2,7 @@
   "name": "word-coach-common",
   "author": "Jude Agboola <marvinjudehk@gmail.com>",
   "version": "1.0.0",
-  "description": "Styles and utilities for word-coach",
+  "description": "Styles and utilities for word-coach, letting you easily author word-coach in other UI libraries.",
   "type": "module",
   "homepage": "https://github.com/marvinjude/word-coach/word-coach-common#readme",
   "bugs": "https://github.com/marvinjude/word-coach/issues",
