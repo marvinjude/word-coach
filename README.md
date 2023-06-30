@@ -18,33 +18,25 @@
 
 </p>
 
-Word Coach is simply a replica of the [Google word coach](https://www.seoexpertindelhi.in/google-word-coach/) built in React and Vuejs. You can see the orginal Google Word coach in action by searching "Google Word coach" on Google via **your mobile device**. This project may only be used for learning purposes as the initial idea is from Google.
+Word Coach is simply a replica of the [Google word coach](https://www.seoexpertindelhi.in/google-word-coach/) built in React. You can see the orginal Google Word coach in action by searching "Google Word coach" on Google via **your mobile device**. This project may only be used for learning purposes as the initial idea is from Google.
 
 ## Examples
 
 We have usage examples on CodeSandbox:
 
 - [React](https://codesandbox.com/iiheu3hg7e83)
-- [VueJs](https://codesandbox.com/iiheu3hg7e8ri3ieh3)
 
 ## Installation
-
-VueJS:
-
-```bash
-yarn add @marvinjudehk/word-coach-react
-```
 
 React:
 
 ```bash
-yarn add @marvinjudehk/word-coach-vue
+yarn add @word-coah/react
 ```
 
 ## Framework specific docs
 
 - [React](https://github.com/marvinjude/word-coach/packages/word-coach-react)
-- [VueJs](https://github.com/marvinjude/word-coach/packages/word-coach-vue)
 
 [![Deploy to Gatsby Cloud](https://www.gatsbyjs.com/deploynow.svg)](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-blog)
 
@@ -61,16 +53,11 @@ TODO: Write more details about contributing a package...
 Licensed under the [MIT License](https://github.com/marvinjude/word-coach/license.md)
 
 ## Todo
-
-- [x] Design loading state 
-- [] Game ended page 
-
+- [ ] Design example app that generates questions using chatGPT
 - [ ] General cleanup 
 - [ ] Cleanup themes
 - [ ] Write test with playright
-- [ ] Design example app that generates questions using chatGPT
 - [ ] TS type for css & svg
-- [ ] Docs around vue and how it's not ready yet
 - [ ] Other docs 
 - [ ] Simple Codesandbox example
 - [ ] Ship to NPM
