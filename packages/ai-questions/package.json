@@ -51,7 +51,6 @@
   "dependencies": {
     "ai": "^2.1.13",
     "csvtojson": "^2.0.10",
-    "openai": "^3.3.0",
     "openai-edge": "^1.1.0"
   }
 }

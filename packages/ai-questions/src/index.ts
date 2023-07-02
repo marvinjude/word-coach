@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from "openai"
+import { Configuration, OpenAIApi } from "openai-edge"
 import csv from "csvtojson"
 
 type QuestionType = "TEXT" | "TEXT-WITH-IMAGE" | "IMAGE"
@@ -32,45 +32,46 @@ export class AIQuestions {
     this.openAI = new OpenAIApi(config)
   }
 
-  static StreamResponse(stream: any, response: any, { dataLength }: any) {
+  static async StreamResponse(
+    stream: ReadableStream<Uint8Array> | null,
+    response: any,
+    { dataLength }: { dataLength: number }
+  ) {
     let csvLine = ""
+
+    const reader = stream?.getReader()
+
+    if (!reader) {
+      throw new Error("Failed to get the reader")
+    }
 
     response.writeHead(200, { "Content-Type": "text/plain" })
 
-    const processAndStreamChunk = async (data: any) => {
-      const lines = data
-        .toString()
-        .split("\n")
-        .filter((line: any) => line.trim() !== "")
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
 
-      for (const line of lines) {
-        const message = line.replace(/^data: /, "")
-
-        if (message === "[DONE]") {
-          const [question] = await csv().fromString(
-            `${TRAINING_DATA_CSV_HEADER}\n${csvLine.replace(/\n$/, "")}`
-          )
-
-          return response.write(
-            JSON.stringify({
-              done: true,
-              data: {
-                dataLength,
-                question,
-              },
-            })
-          )
+        if (done) {
+          response.end()
         }
-        try {
-          const { choices } = JSON.parse(message)
-          if (choices[0].delta.content) csvLine += choices[0].delta.content
 
-          if (csvLine.endsWith("\n")) {
+        const lines = new TextDecoder()
+          .decode(value)
+          .split("\n")
+          .filter(line => line.trim() !== "")
+
+        if (lines.length === 0) {
+          throw new Error("No lines found")
+        }
+
+        for (const line of lines) {
+          const message = line.replace(/^data: /, "")
+
+          if (message === "[DONE]") {
             const [question] = await csv().fromString(
               `${TRAINING_DATA_CSV_HEADER}\n${csvLine.replace(/\n$/, "")}`
             )
-
-            response.write(
+            return response.end(
               JSON.stringify({
                 done: true,
                 data: {
@@ -79,16 +80,44 @@ export class AIQuestions {
                 },
               })
             )
-
-            csvLine = ""
           }
-        } catch (error) {
-          console.error("Could not JSON parse stream message", message, error)
+
+          try {
+            const { choices } = JSON.parse(message)
+
+            if (choices[0]?.delta?.content) {
+              csvLine += choices[0].delta.content
+            }
+
+            if (csvLine.endsWith("\n")) {
+              const [question] = await csv().fromString(
+                `${TRAINING_DATA_CSV_HEADER}\n${csvLine.replace(/\n$/, "")}`
+              )
+              response.write(
+                JSON.stringify({
+                  done: false,
+                  data: {
+                    dataLength,
+                    question,
+                  },
+                })
+              )
+              csvLine = ""
+            }
+          } catch (error) {
+            console.error(
+              "Could not JSON parse stream message:",
+              message,
+              error
+            )
+          }
         }
       }
+    } catch (error) {
+      console.error("An error occurred while reading the stream:", error)
+    } finally {
+      reader.releaseLock()
     }
-
-    stream.on("data", processAndStreamChunk)
   }
 
   static getUserInstructions({
@@ -159,34 +188,31 @@ export class AIQuestions {
     category: string,
     length: number = 5,
     types?: QuestionType[]
-  ) {
-    const completion = await this.openAI.createChatCompletion(
-      {
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content: SYSEM_INSTRUCTIONS,
-          },
-          {
-            role: "user",
-            content: AIQuestions.getUserInstructions({
-              category,
-              length,
-              types,
-            }),
-          },
-        ],
-        temperature: 0.7,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-        stream: true,
-        n: 1,
-      },
-      { responseType: "stream" }
-    )
+  ): Promise<ReadableStream<Uint8Array> | null> {
+    const completion = await this.openAI.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: SYSEM_INSTRUCTIONS,
+        },
+        {
+          role: "user",
+          content: AIQuestions.getUserInstructions({
+            category,
+            length,
+            types,
+          }),
+        },
+      ],
+      temperature: 0.7,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      stream: true,
+      n: 1,
+    })
 
-    return completion.data
+    return completion.body
   }
 }
