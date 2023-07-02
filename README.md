@@ -64,12 +64,11 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 - [ ] Other docs
 - [ ] Simple Codesandbox example
 - [ ] Ship to NPM
-- [ ] Ship to NPM
 
 ### @word-coach/ai-questions
-
-- [ ] Figure out how to stream questions
-- [ ] Modify and optimize prompt
+- [ ] Let users supply option count 
+- [ ] Write `getImage()` function
+- [ ] Write tests
 
 ### wordcoach.xyz
 

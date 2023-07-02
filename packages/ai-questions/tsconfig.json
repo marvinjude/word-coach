@@ -10,6 +10,7 @@
     ]
   },
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "module": "esnext",
     "declaration": true,

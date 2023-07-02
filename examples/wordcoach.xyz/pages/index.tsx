@@ -10,7 +10,10 @@ const questionsDB: WordCoachProps["questions"] = [
 
     question: "What's the full meaning of 'UK'?",
     score: 30,
-    options: [{ text: "United Kingdom of UK edehdjhejhd" }, { text: "Ultra Kingdom of UKE dhjedjedeg" }],
+    options: [
+      { text: "United Kingdom of UK edehdjhejhd" },
+      { text: "Ultra Kingdom of UKE dhjedjedeg" },
+    ],
     answer: [0],
     whyAnswer: [
       {
@@ -267,6 +270,31 @@ function Field({
   }
 }
 
+const useAIQuestions = (endpoint: any) => {
+  fetch(endpoint)
+    .then(response => {
+      const reader = response.body.getReader()
+      function readChunks() {
+        return reader.read().then(({ done, value }) => {
+          if (done) {
+            console.log("All chunks received")
+            return
+          }
+
+          const chunk = new TextDecoder().decode(value)
+          console.log("Received chunk:", chunk)
+
+          return readChunks()
+        })
+      }
+
+      return readChunks()
+    })
+    .catch(error => {
+      console.error("Error:", error)
+    })
+}
+
 function Home() {
   const [wordCoachProps, setWordCoachProps] = useState({
     questions: [] as WordCoachProps["questions"],
@@ -337,7 +365,12 @@ function Home() {
         <div className="w-full lg:w-1/3 h-screen text-black lg:border-l shadow flex flex-col">
           <header className="bg-gradient-to-r from-blue-700 to-blue-900 p-5 flex">
             <div>
-              <h1 className="text-xl font-medium text-white">
+              <h1
+                className="text-xl font-medium text-white"
+                onClick={() => {
+                  useAIQuestions("/api/ai-questions")
+                }}
+              >
                 Configure Properties
               </h1>
               <p className="text-slate-300 text-sm">
@@ -354,9 +387,9 @@ function Home() {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />

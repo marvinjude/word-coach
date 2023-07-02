@@ -32,7 +32,7 @@
   & svg {
     display: block;
     line-height: 1.2rem;
-    stroke-width: 2px;
+    strokewidth: 2px;
   }
 
   // Card styles
@@ -167,8 +167,7 @@
   background: var(--optionButtonUnansweredBackground);
   color: var(--optionButtonUnansweredText);
 
-  & .button-inner{
-
+  & .button-inner {
   }
 
   &.button--wrong {
@@ -338,7 +337,7 @@
 
   &_outer_cirlce {
     stroke: #f3f3f3;
-    stroke-width: 5;
+    strokewidth: 5;
   }
 
   &_circle_group {
