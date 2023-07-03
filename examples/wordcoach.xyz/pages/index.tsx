@@ -270,10 +270,11 @@ function Field({
   }
 }
 
-const useAIQuestions = (endpoint: any) => {
+const useAIQuestions = (endpoint: string) => {
   fetch(endpoint)
     .then(response => {
       const reader = response.body.getReader()
+
       function readChunks() {
         return reader.read().then(({ done, value }) => {
           if (done) {
@@ -282,7 +283,7 @@ const useAIQuestions = (endpoint: any) => {
           }
 
           const chunk = new TextDecoder().decode(value)
-          console.log("Received chunk:", chunk)
+          console.log(JSON.parse(chunk))
 
           return readChunks()
         })

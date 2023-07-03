@@ -15,10 +15,10 @@ export default async function handler(
   const wordCoachQuestions = new AIQuestions(API_KEY)
   const questionCount = 5
 
-  const questionsStream = await wordCoachQuestions.getQuestionsStream(
-    "Philosophy",
-    questionCount
-  )
+  const questionsStream = await wordCoachQuestions.getQuestionsStream({
+    category: "Philosophy",
+    length: 5,
+  })
 
   AIQuestions.StreamResponse(questionsStream, response, {
     dataLength: questionCount,
