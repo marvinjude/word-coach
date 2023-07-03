@@ -55,7 +55,7 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 ## Todo
 
 ### @word-coach/react
-
+- [ ] integrate streaming
 - [ ] Design example app that generates questions using chatGPT
 - [ ] General cleanup
 - [ ] Cleanup themes
@@ -66,12 +66,9 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 - [ ] Ship to NPM
 
 ### @word-coach/ai-questions
-- [ ] Let users supply option count 
-- [ ] Write `getImage()` function
 - [ ] Write tests
 
 ### wordcoach.xyz
-
 - [ ] Copy Code Feature
   - [ ] React
   - [ ] Web Component

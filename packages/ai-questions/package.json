@@ -29,6 +29,7 @@
     "node": ">=12"
   },
   "scripts": {
+    "watch": "rollup --config rollup.config.js --watch",
     "build": "rollup -c",
     "prepublishOnly": "npm run build",
     "types": "tsc --noEmit",
@@ -50,6 +51,7 @@
   },
   "dependencies": {
     "ai": "^2.1.13",
+    "cheerio": "1.0.0-rc.12",
     "csvtojson": "^2.0.10",
     "openai-edge": "^1.1.0"
   }

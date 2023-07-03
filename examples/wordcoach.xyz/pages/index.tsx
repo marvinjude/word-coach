@@ -1,10 +1,10 @@
 import { WordCoach, WordCoachProps } from "word-coach-react"
 import React, { useEffect, useState } from "react"
-import { Select, Button, Switch, Input } from "@chakra-ui/react"
+import { Select, Switch, Input } from "@chakra-ui/react"
 
 const questionsDB: WordCoachProps["questions"] = [
   {
-    type: "TEXT",
+    type: "TEXT_WITH_IMAGE",
     image:
       "https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
 
@@ -27,7 +27,7 @@ const questionsDB: WordCoachProps["questions"] = [
     ],
   },
   {
-    type: "TEXT",
+    type: "TEXT_WITH_IMAGE",
     image:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/510px-Flag_of_the_United_Kingdom_%281-2%29.svg.png",
 
@@ -47,7 +47,7 @@ const questionsDB: WordCoachProps["questions"] = [
     ],
   },
   {
-    type: "TEXT",
+    type: "TEXT_WITH_IMAGE",
     image:
       "https://img.freepik.com/free-vector/cute-squirrel-standing-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium_138676-6545.jpg?w=2000",
 
@@ -270,31 +270,31 @@ function Field({
   }
 }
 
-const useAIQuestions = (endpoint: string) => {
-  fetch(endpoint)
-    .then(response => {
-      const reader = response.body.getReader()
+// const useAIQuestions = (endpoint: string) => {
+//   fetch(endpoint)
+//     .then(response => {
+//       const reader = response.body.getReader()
 
-      function readChunks() {
-        return reader.read().then(({ done, value }) => {
-          if (done) {
-            console.log("All chunks received")
-            return
-          }
+//       function readChunks() {
+//         return reader.read().then(({ done, value }) => {
+//           if (done) {
+//             console.log("All chunks received")
+//             return
+//           }
 
-          const chunk = new TextDecoder().decode(value)
-          console.log(JSON.parse(chunk))
+//           const chunk = new TextDecoder().decode(value)
+//           console.log(JSON.parse(chunk))
 
-          return readChunks()
-        })
-      }
+//           return readChunks()
+//         })
+//       }
 
-      return readChunks()
-    })
-    .catch(error => {
-      console.error("Error:", error)
-    })
-}
+//       return readChunks()
+//     })
+//     .catch(error => {
+//       console.error("Error:", error)
+//     })
+// }
 
 function Home() {
   const [wordCoachProps, setWordCoachProps] = useState({

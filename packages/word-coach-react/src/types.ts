@@ -5,7 +5,12 @@ export type UserAnswers = {
   [key: string]: number
 }
 
-export type QuestionType = "IMAGE" | "TEXT"
+//Todo: move type to common package
+export enum QuestionTypes {
+  TEXT = "TEXT",
+  TEXT_WITH_IMAGE = "TEXT_WITH_IMAGE",
+  IMAGE = "IMAGE",
+}
 
 export type Option = TextOption | ImageOption
 
@@ -65,12 +70,8 @@ export interface IQuestion {
 
   /**
    * The type of question
-   * @note If the type is "IMAGE", the url is required, if the type is "TEXT", the text is required
-   * @example
-   * const type: QuestionType = "TEXT"
-   * const type: QuestionType = "IMAGE"
    */
-  type: QuestionType
+  type: keyof typeof QuestionTypes
 
   /**
    * The score to be awarded for this question
@@ -88,6 +89,12 @@ export interface IQuestion {
 }
 
 export interface WordCoachProps {
+  /**
+   * When using @word-coach/ai-questions, pass in the endpoint to stream questions from
+   * if specified, the `questions` prop will be ignored and the questions will be streamed from the endpoint
+   */
+  streamEndPoint?: string
+
   /**
    * Whether to show a "Next Round" button at the end of the quiz
    * @default false
@@ -188,6 +195,7 @@ type AppContextTypeFromWordCoachProps = Pick<
   | "defaultScore"
   | "onEnd"
   | "onSelectAnswer"
+  | "isLoading"
 >
 
 export type Screen = "game" | "end"

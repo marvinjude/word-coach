@@ -11,11 +11,13 @@ export default async function handler(
   response: NextApiResponse<Data>
 ) {
   const API_KEY = process.env.OPENAI_SECRET as string
-
-  const wordCoachQuestions = new AIQuestions(API_KEY)
   const questionCount = 5
 
-  const questionsStream = await wordCoachQuestions.getQuestionsStream({
+  const customGetImageFunction = async () => "customGetImageFunction RESULT"
+
+  const aiQuestions = new AIQuestions(API_KEY)
+
+  const questionsStream = await aiQuestions.getQuestionsStream({
     category: "Philosophy",
     length: 5,
   })
