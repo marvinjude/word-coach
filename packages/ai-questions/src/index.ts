@@ -1,7 +1,11 @@
 import { Configuration, OpenAIApi } from "openai-edge"
 import csv from "csvtojson"
 
-type QuestionType = "TEXT" | "TEXT-WITH-IMAGE" | "IMAGE"
+export enum QuestionTypes {
+  text = "TEXT",
+  textWithImage = "TEXT_WITH_IMAGE",
+  image = "IMAGE",
+}
 
 const TRAINING_DATA_CSV_HEADER = `questionIndex,type,question,image,score,options,answer`
 
@@ -9,14 +13,13 @@ const SYSEM_INSTRUCTIONS = `
 You are a question generator for an app, You're required to generate a CSV like the below:
 
 ${TRAINING_DATA_CSV_HEADER}
-0,TEXT,"How many days make up a week",NULL,30,"7, 11","0"
-1,TEXT-WITH-IMAGE,"Who invented this device?","A Radio",30,"Reginald A. Fessenden, Bill Gates","0"
-3,TEXT-WITH-IMAGE,"Who is this spoon called?","A Tea spoon",30,"Table Spoon, Tea Spoon","1"
-4,IMAGE,"Which of these is the Facebook logo?",NULL,30,"Facebook logo, Google logo","0"
+0,${QuestionTypes.text},"How many days make up a week",NULL,30,"7, 11","0"
+1,${QuestionTypes.textWithImage},"Who invented this device?","A Radio",30,"Reginald A. Fessenden, Bill Gates","0"
+3,${QuestionTypes.textWithImage},"Who is this spoon called?","A Tea spoon",30,"Table Spoon, Tea Spoon","1"
+4,${QuestionTypes.image},"Which of these is the Facebook logo?",NULL,30,"Facebook logo, Google logo","0"
 
 These are the instructions to follow:
-- For questions of TEXT-WITH-IMAGE type questions, make sure the question is about the image
-- Only generate two options per question
+- For questions of ${QuestionTypes.textWithImage} type questions, make sure the question is about the image
 - Don't inlcude the CSV header
 - Make sure you only respond with the CSV requested and nothing more
 `
@@ -93,12 +96,20 @@ export class AIQuestions {
               const [question] = await csv().fromString(
                 `${TRAINING_DATA_CSV_HEADER}\n${csvLine.replace(/\n$/, "")}`
               )
+              const hasImageDescription =
+                question.type === QuestionTypes.image ||
+                question.type === QuestionTypes.textWithImage
+
               response.write(
                 JSON.stringify({
                   done: false,
                   data: {
                     dataLength,
-                    question,
+                    question: hasImageDescription
+                      ? await AIQuestions.replaceImageDescriptionWithUrl(
+                          question
+                        )
+                      : question,
                   },
                 })
               )
@@ -124,59 +135,53 @@ export class AIQuestions {
     category,
     length,
     types,
+    optionsLength,
   }: {
     category: string
     length: number
-    types?: QuestionType[]
+    types: string[]
+    optionsLength: number
   }) {
-    const allQuestionTypes: QuestionType[] = [
-      "TEXT",
-      "TEXT-WITH-IMAGE",
-      "IMAGE",
-    ]
-    const typesString = types?.join(",") || allQuestionTypes.join(",")
-
-    return `Based on the format specified above, Generate ${length} questions of type: ${typesString} about ${category}`
+    return `Based on the format specified above, Generate ${length} questions of type: ${types?.join(
+      ","
+    )} about ${category}.Each question should have ${optionsLength} comma separated options`
   }
 
   /**
    * Fetch potential images from Google Images
    */
-  async getImageURL(imageDescriptions: Array<any>) {
-    return []
+  static async getImageURL(imageDescriptions: Array<any>) {
+    const imageURLs = []
+
+    for (const imageDescription of imageDescriptions) {
+      imageURLs.push(
+        "https://upload.wikimedia.org/wikipedia/commons/thu…10px-Flag_of_the_United_Kingdom_%281-2%29.svg.png"
+      )
+    }
+
+    return imageURLs
   }
 
   /**
    *  Some of the generated questions have an image descriptions and not actual image URL
    *  so we need to fetch images URL for them on Google Images and replace the image description with the URL
    */
-  async replaceImageDescriptionWithUrl(questions: any): Promise<any> {
-    const newQuestions: any = questions.filter((question: any) => {
-      return question.type !== "TEXT"
-    })
-
-    for (const question of questions.filter) {
-      if (question.type === "TEXT-WITH-IMAGE") {
-        const [imageURL] = await this.getImageURL([question.image])
-        newQuestions.push({ ...question, image: imageURL })
-      }
-
-      if (question.type === "IMAGE") {
-        const imageURLs = await this.getImageURL(
-          question.options.map((option: any) => option.image)
-        )
-
-        newQuestions.push({
-          ...question,
-          options: question.options.map((option: any, index: number) => ({
-            ...option,
-            url: imageURLs[index],
-          })),
-        })
-      }
+  static async replaceImageDescriptionWithUrl(question: any): Promise<any> {
+    if (question.type === QuestionTypes.textWithImage) {
+      const [imageURL] = await AIQuestions.getImageURL([question.image])
+      return { ...question, image: imageURL }
     }
 
-    return newQuestions
+    if (question.type === QuestionTypes.image) {
+      const imageURLs = await AIQuestions.getImageURL(
+        question.options.split(",")
+      )
+
+      return {
+        ...question,
+        options: imageURLs.join(","),
+      }
+    }
   }
 
   /**
@@ -184,11 +189,24 @@ export class AIQuestions {
    * @param length the number of questions to generate
    * @returns
    */
-  async getQuestionsStream(
-    category: string,
-    length: number = 5,
-    types?: QuestionType[]
-  ): Promise<ReadableStream<Uint8Array> | null> {
+  async getQuestionsStream({
+    category,
+    length,
+    types = [
+      QuestionTypes.image,
+      QuestionTypes.text,
+      QuestionTypes.textWithImage,
+    ],
+    optionsLength = 2,
+  }: {
+    category: string
+    length: number
+    types?: string[]
+    optionsLength?: number
+  }): Promise<ReadableStream<Uint8Array> | null> {
+    const allQuestionTypes = Object.values(QuestionTypes)
+    const typesString = types || allQuestionTypes
+
     const completion = await this.openAI.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
@@ -201,7 +219,8 @@ export class AIQuestions {
           content: AIQuestions.getUserInstructions({
             category,
             length,
-            types,
+            types: typesString,
+            optionsLength,
           }),
         },
       ],
