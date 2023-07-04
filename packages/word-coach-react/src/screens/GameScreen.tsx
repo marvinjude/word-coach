@@ -13,7 +13,11 @@ import { shuffleArray as shuffle } from "word-coach-common"
 import styles from "word-coach-common/styles/styles.css"
 import PhoneLink from "word-coach-common/icons/phone-link.svg"
 
-import type { WordCoachProps, AppContextType } from "../types"
+import {
+  type WordCoachProps,
+  type AppContextType,
+  QuestionTypes,
+} from "../types"
 
 import { AppContext } from "../context"
 
@@ -160,6 +164,8 @@ const GameScreen = () => {
     }
   })
 
+  console.log({ questionType })
+
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -175,7 +181,7 @@ const GameScreen = () => {
         exit={{ opacity: -200 }}
       >
         <p className={styles.question}>{question}</p>
-        {questionType === "IMAGE" && (
+        {questionType === QuestionTypes.IMAGE && (
           <ImageOptions
             currentQuestionIndex={currentQuestionIndex}
             onChooseAnswer={onChooseAnswer}
@@ -187,7 +193,8 @@ const GameScreen = () => {
           />
         )}
 
-        {questionType === "TEXT" && (
+        {(questionType === QuestionTypes.TEXT ||
+          questionType === QuestionTypes.TEXT_WITH_IMAGE) && (
           <ButtonOptions
             currentQuestionIndex={currentQuestionIndex}
             onChooseAnswer={onChooseAnswer}

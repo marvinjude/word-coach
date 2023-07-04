@@ -13,7 +13,12 @@ import styles from "word-coach-common/styles/styles.css"
 import callbackCaller from "../utils/callbackCaller"
 import { AppContext } from "../context"
 
-import type { AppContextType, ImageOption, TextOption } from "../types"
+import {
+  QuestionTypes,
+  type AppContextType,
+  type ImageOption,
+  type TextOption,
+} from "../types"
 
 import { classNames } from "word-coach-common"
 
@@ -66,7 +71,7 @@ const Explainer = ({ question }) => {
         </div>
       )}
 
-      {question.type === "IMAGE" && (
+      {question.type === QuestionTypes.IMAGE && (
         <div style={{ display: "flex", gap: "1rem" }}>
           {question.options.map((option, optionIndex) => (
             <ImageWithHint
