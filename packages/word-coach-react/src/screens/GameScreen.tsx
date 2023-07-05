@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useContext } from "react"
+import React, { useRef, useState, useMemo, useContext, useEffect } from "react"
 import { motion } from "framer-motion"
 
 import Highlights from "../components/Highlights"
@@ -9,51 +9,90 @@ import Score from "../components/Score"
 import callbackCaller from "../utils/callbackCaller"
 import { isDev } from "../utils/isDev"
 
-import { shuffleArray as shuffle } from "word-coach-common"
 import styles from "word-coach-common/styles/styles.css"
 import PhoneLink from "word-coach-common/icons/phone-link.svg"
+import Spinner from "word-coach-common/icons/spinner.svg"
 
-import {
-  type WordCoachProps,
-  type AppContextType,
-  QuestionTypes,
-} from "../types"
+import { type AppContextType, QuestionTypes } from "../types"
 
 import { AppContext } from "../context"
+import useGameEngine from "../hooks/useGameEngine"
 
+// Move to utils and constants / common
 const MAX_NUMBER_OF_OPTION = 2
-const DELAY_BEFORE_NEXT = 1200
+const TRANSITION_DELAY = 1200
 
-const delay = (f: () => any) => {
+const delay = (f: () => any, timeDelay = TRANSITION_DELAY) => {
   const timeout = setTimeout(() => {
     clearTimeout(timeout)
     f()
-  }, DELAY_BEFORE_NEXT)
+  }, timeDelay)
 }
 
 const GameScreen = () => {
   const {
     enableShuffle,
-    questions: unshuffledQuestions,
+    questions: staticQuestions,
     defaultScore,
     onEnd,
     onSelectAnswer,
     userAnswers,
     setScreen,
     setUserAnswers,
+    revealAnswerOnSkip,
+    streamEndPoint,
+    isLoading,
   } = useContext(AppContext) as AppContextType
 
-  // Memoise the shuffled question so we don't reshuffle on rerender
-  const questions: WordCoachProps["questions"] = useMemo(
-    () => (enableShuffle ? shuffle(unshuffledQuestions) : unshuffledQuestions),
-    [unshuffledQuestions, enableShuffle]
-  )
+  if (isLoading && streamEndPoint) {
+    console.warn(
+      `You are using a stream endpoint and isLoading is set to true
+      This may not be the correct prop configuration.`
+    )
+  }
+
+  if (staticQuestions && streamEndPoint)
+    throw new Error(
+      "You can't have both static questions and a stream endpoint"
+    )
+
+  if (!staticQuestions && !streamEndPoint) {
+    throw new Error(
+      "You must provide either static questions or a stream endpoint"
+    )
+  }
+
+  const { questions, hasReceivedFirstChunk, questionsCount } = useGameEngine({
+    staticQuestions,
+    streamEndPoint,
+    enableShuffle,
+  })
 
   const [scoreList, setScoreList] = useState([{ value: 0, id: Date.now() }])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const skippedQuestionsIndex = useRef<string[]>([])
   const [revealRightAndWrongAnswer, setRevealRightAndWrongAnswer] =
     useState(false)
-  const skippedQuestionsIndex = useRef<string[]>([])
+
+  if (isLoading || (streamEndPoint && !hasReceivedFirstChunk)) {
+    return (
+      <div className={styles.card}>
+        <div className={styles.loading}>
+          <Spinner />
+        </div>
+      </div>
+    )
+  }
+
+  if (!isLoading && !questions.length) {
+    return (
+      <div className={styles.card}>
+        <div className={styles.loading}>
+          <p>There are no questions</p>
+        </div>
+      </div>
+    )
+  }
 
   const {
     options,
@@ -61,7 +100,6 @@ const GameScreen = () => {
     type: questionType,
   } = questions[currentQuestionIndex]
 
-  // Compute value
   const isLastQuestion = currentQuestionIndex === questions.length - 1
   const currentQuestionIsAnswered = String(currentQuestionIndex) in userAnswers
   const currendQuestionIsSkipped = skippedQuestionsIndex.current.includes(
@@ -85,13 +123,15 @@ const GameScreen = () => {
       }
     })
   })
-  // End of warnings
 
-  const gotoNextQuestion = () => {
-    delay(() => {
-      setCurrentQuestionIndex(prev => prev + 1)
-      setRevealRightAndWrongAnswer(false)
-    })
+  const gotoNextQuestion = (shouldDelay: boolean = true) => {
+    delay(
+      () => {
+        setCurrentQuestionIndex(prev => prev + 1)
+        setRevealRightAndWrongAnswer(false)
+      },
+      shouldDelay ? TRANSITION_DELAY : 0
+    )
   }
 
   const gotoGameEndScreen = () => {
@@ -101,23 +141,22 @@ const GameScreen = () => {
   }
 
   const skipQuestion = () => {
-    // Prevent skipping when current question is already skipped / answered
     if (currentQuestionIsAnswered || currendQuestionIsSkipped) return
 
     skippedQuestionsIndex.current.push(currentQuestionIndex.toString())
 
-    setRevealRightAndWrongAnswer(true)
+    setRevealRightAndWrongAnswer(revealAnswerOnSkip as boolean)
 
     if (isLastQuestion) {
       callbackCaller(onEnd, { answers: userAnswers, score: scoreList[0] })
       gotoGameEndScreen()
     } else {
-      gotoNextQuestion()
+      if (revealAnswerOnSkip) gotoNextQuestion(true)
+      else gotoNextQuestion(false)
     }
   }
 
   const onChooseAnswer = (optionIndex: number) => {
-    // Prevent skipping when current question is already skipped / answered
     if (currentQuestionIsAnswered || currendQuestionIsSkipped) return
 
     const answerIsCorrect =
@@ -152,19 +191,21 @@ const GameScreen = () => {
     }
   }
 
-  const highlightDots = questions.map((_, questionIndex) => {
-    const hasSelectedAnswer = String(questionIndex) in userAnswers
-    const answerIndexSelected = userAnswers[questionIndex.toString()]
-    const selectedAnswerIsCorrect =
-      questions[questionIndex].answer.includes(answerIndexSelected)
+  const highlightDots = Array.from(Array(questionsCount)).map(
+    (_, questionIndex) => {
+      const hasSelectedAnswer = String(questionIndex) in userAnswers
 
-    return {
-      wrong: hasSelectedAnswer && !selectedAnswerIsCorrect,
-      right: hasSelectedAnswer && selectedAnswerIsCorrect,
+      const answerIndexSelected = userAnswers[questionIndex.toString()]
+
+      const selectedAnswerIsCorrect =
+        questions[questionIndex]?.answer?.includes(answerIndexSelected)
+
+      return {
+        wrong: hasSelectedAnswer && !selectedAnswerIsCorrect,
+        right: hasSelectedAnswer && selectedAnswerIsCorrect,
+      }
     }
-  })
-
-  console.log({ questionType })
+  )
 
   return (
     <div className={styles.card}>
@@ -218,6 +259,7 @@ const GameScreen = () => {
         </div>
         <div className={styles.skip_button_wrapper}>
           <button
+            disabled={currentQuestionIsAnswered || currendQuestionIsSkipped}
             aria-label="Skip"
             className={styles.skip_button}
             onClick={skipQuestion}

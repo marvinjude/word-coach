@@ -38,8 +38,6 @@ yarn add @word-coah/react
 
 - [React](https://github.com/marvinjude/word-coach/packages/word-coach-react)
 
-[![Deploy to Gatsby Cloud](https://www.gatsbyjs.com/deploynow.svg)](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-blog)
-
 ## Contributing
 
 If you feel ambitious and you'll like to write Word Coach in another library, I'm happy to assist you in your contribution. Feel free to [send an email](mailto::marvinjudehk@gmail.com).
@@ -55,21 +53,35 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 ## Todo
 
 ### @word-coach/react
-- [ ] integrate streaming
-- [ ] Design example app that generates questions using chatGPT
+
+- [ ] Use streamed data over fake data
+- [ ] Prevent highlight overflow
+- [ ] Introduce modes ["stream|static"], throw on isLoading if in stream mode 
+- [ ] Prevent navigation if next chunk hasn't arrived
+- [ ] add streamProgress callback
+
+- [ ] Cleanup themes
+- [ ] Fix EndGameScreen
 - [ ] General cleanup
 - [ ] Cleanup themes
 - [ ] Write test with playright
 - [ ] TS type for css & svg
-- [ ] Other docs
+- [ ] Docs
 - [ ] Simple Codesandbox example
 - [ ] Ship to NPM
+- [ ] Deploy same in react to codesandbox(setup pipline for that)
+
 
 ### @word-coach/ai-questions
+- [ ] Fix undecodable chucks
 - [ ] Write tests
+- [ ] Docs
 
 ### wordcoach.xyz
 - [ ] Copy Code Feature
   - [ ] React
   - [ ] Web Component
 - [ ] Open on CodeSandbox
+- [ ] Block Requests not coming from word-coach-xyz
+- [ ] Incoporate modes
+- [ ] Show stream progress in stream mode

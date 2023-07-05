@@ -22,8 +22,10 @@ const WordCoach: React.FC<WordCoachProps> = ({
   onSelectAnswer,
   isLoading = false,
   hasNextRound = false,
+  revealAnswerOnSkip = true,
   onClickNextRound,
   questions,
+  streamEndPoint,
 }) => {
   const [userAnswers, setUserAnswers] = useState<UserAnswers>({})
   const [screen, setScreen] = useState<Screen>("game")
@@ -50,30 +52,21 @@ const WordCoach: React.FC<WordCoachProps> = ({
     hasNextRound,
     onClickNextRound,
     setScreen,
+    revealAnswerOnSkip,
+    streamEndPoint,
+    isLoading,
   }
 
   return (
     <AppContext.Provider value={appContextValue}>
-      {isLoading && (
+      {screen === "game" && <GameScreen />}
+      {screen === "end" && (
         <div className={styles.card}>
-          <div className={styles.loading}>
-            <Spinner />
+          <div className={styles.header}>
+            <span className={styles.icon}>WORD COACH</span>
           </div>
+          <EndScreen />
         </div>
-      )}
-
-      {!isLoading && (
-        <>
-          {screen === "game" && <GameScreen />}
-          {screen === "end" && (
-            <div className={styles.card}>
-              <div className={styles.header}>
-                <span className={styles.icon}>WORD COACH</span>
-              </div>
-              <EndScreen />
-            </div>
-          )}
-        </>
       )}
     </AppContext.Provider>
   )

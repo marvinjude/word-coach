@@ -11,7 +11,7 @@ export default async function handler(
   response: NextApiResponse<Data>
 ) {
   const API_KEY = process.env.OPENAI_SECRET as string
-  const questionCount = 5
+  const questionCount = 7
 
   const customGetImageFunction = async () => "customGetImageFunction RESULT"
 
@@ -19,7 +19,7 @@ export default async function handler(
 
   const questionsStream = await aiQuestions.getQuestionsStream({
     category: "Philosophy",
-    length: 5,
+    length: questionCount,
   })
 
   AIQuestions.StreamResponse(questionsStream, response, {

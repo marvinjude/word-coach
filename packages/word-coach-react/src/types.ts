@@ -115,9 +115,9 @@ export interface WordCoachProps {
 
   /**
    * Whether to reveal the right and wrong answers when the user skips the question
-   * @default false
+   * @default true
    */
-  revealAnswerOnSkip?: boolean
+  revealAnswerOnSkip?: boolean 
 
   /**
    * Theme to be used, defaults to "nigeria"
@@ -173,7 +173,7 @@ export interface WordCoachProps {
         },
     ]
   */
-  questions: Array<IQuestion>
+  questions?: Array<IQuestion>
 }
 
 export interface OptionsUI {
@@ -196,6 +196,8 @@ type AppContextTypeFromWordCoachProps = Pick<
   | "onEnd"
   | "onSelectAnswer"
   | "isLoading"
+  | "revealAnswerOnSkip"
+  | "streamEndPoint"
 >
 
 export type Screen = "game" | "end"

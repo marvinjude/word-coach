@@ -270,32 +270,6 @@ function Field({
   }
 }
 
-// const useAIQuestions = (endpoint: string) => {
-//   fetch(endpoint)
-//     .then(response => {
-//       const reader = response.body.getReader()
-
-//       function readChunks() {
-//         return reader.read().then(({ done, value }) => {
-//           if (done) {
-//             console.log("All chunks received")
-//             return
-//           }
-
-//           const chunk = new TextDecoder().decode(value)
-//           console.log(JSON.parse(chunk))
-
-//           return readChunks()
-//         })
-//       }
-
-//       return readChunks()
-//     })
-//     .catch(error => {
-//       console.error("Error:", error)
-//     })
-// }
-
 function Home() {
   const [wordCoachProps, setWordCoachProps] = useState({
     questions: [] as WordCoachProps["questions"],
@@ -308,14 +282,12 @@ function Home() {
   })
 
   const fetchQuestions = async () => {
-    setWordCoachProps(prev => ({ ...prev, isLoading: true }))
-
     await new Promise(resolve => setTimeout(() => resolve(true), 2000))
 
     setWordCoachProps(prev => ({
       ...prev,
-      isLoading: false,
       questions: questionsDB,
+      isLoading: false,
     }))
   }
 
@@ -350,6 +322,7 @@ function Home() {
           </header>
           <div className="flex-grow flex justify-center items-center">
             <WordCoach
+              // streamEndPoint="/api/ai-questions"
               onClickNextRound={fetchQuestions}
               hasNextRound={wordCoachProps.hasNextRound}
               isLoading={wordCoachProps.isLoading}
@@ -366,12 +339,7 @@ function Home() {
         <div className="w-full lg:w-1/3 h-screen text-black lg:border-l shadow flex flex-col">
           <header className="bg-gradient-to-r from-blue-700 to-blue-900 p-5 flex">
             <div>
-              <h1
-                className="text-xl font-medium text-white"
-                onClick={() => {
-                  useAIQuestions("/api/ai-questions")
-                }}
-              >
+              <h1 className="text-xl font-medium text-white">
                 Configure Properties
               </h1>
               <p className="text-slate-300 text-sm">

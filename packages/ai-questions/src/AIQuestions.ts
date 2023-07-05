@@ -67,7 +67,17 @@ export class AIQuestions {
         const { done, value } = await reader.read()
 
         if (done) {
-          response.end()
+          const [question] = await csv().fromString(
+            `${TRAINING_DATA_CSV_HEADER}\n${csvLine.replace(/\n$/, "")}`
+          )
+
+          response.end({
+            done: true,
+            data: {
+              dataLength,
+              question: await processQuestion(question),
+            },
+          })
         }
 
         const lines = new TextDecoder()
