@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import Button from "../components/Button"
 import Score from "../components/Score"
 import AccordionItem from "../components/Accordion"
@@ -11,16 +11,11 @@ import QuestionMark from "word-coach-common/icons/question-mark.svg"
 import styles from "word-coach-common/styles/styles.css"
 
 import callbackCaller from "../utils/callbackCaller"
-import { AppContext } from "../context"
 
-import {
-  QuestionTypes,
-  type AppContextType,
-  type ImageOption,
-  type TextOption,
-} from "../types"
+import { QuestionTypes } from "../types"
 
 import { classNames } from "word-coach-common"
+import { EndScreenProps } from "../WordCoach"
 
 const ImageWithHint: React.FC<{
   url: string
@@ -64,7 +59,7 @@ const Explainer = ({ question }) => {
                     <Cross />
                   )}
                 </span>
-                {(option as TextOption).text}
+                {option}
               </div>
             ))}
           </div>
@@ -76,7 +71,7 @@ const Explainer = ({ question }) => {
           {question.options.map((option, optionIndex) => (
             <ImageWithHint
               key={optionIndex}
-              url={(option as ImageOption).url}
+              url={option}
               hint={() =>
                 question.answer.includes(optionIndex) ? <Check /> : <Cross />
               }
@@ -143,16 +138,15 @@ const ScoreArea = ({
   )
 }
 
-const EndScreen = () => {
-  const {
-    questions,
-    hasNextRound,
-    onClickNextRound,
-    userAnswers,
-    setUserAnswers,
-    setScreen,
-  } = useContext(AppContext) as AppContextType
-
+const EndScreen = ({
+  questions,
+  hasNextRound,
+  onClickNextRound,
+  userAnswers,
+  setUserAnswers,
+  setScreen,
+  ...endScreenProps
+}: EndScreenProps) => {
   const correctAnswerCount = questions.reduce((prev, cur, index) => {
     const answerForQuestionIsCorrrect = cur.answer.includes(userAnswers[index])
     if (answerForQuestionIsCorrrect) {

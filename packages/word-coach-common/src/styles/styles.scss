@@ -32,7 +32,7 @@
   & svg {
     display: block;
     line-height: 1.2rem;
-    strokewidth: 2px;
+    stroke-width: 2px;
   }
 
   // Card styles
@@ -101,8 +101,13 @@
   justify-content: space-between;
 
   & div {
-    flex: 1 1 0;
+    flex: 1 0 0;
     padding: 0.5rem;
+    overflow: hidden;
+  }
+
+  &_center {
+    display: flex;
   }
 
   .skip_button_wrapper {
@@ -118,7 +123,7 @@
     font-size: 0.875rem;
     color: var(--containerForeground);
 
-    &[disabled]{
+    &[disabled] {
       color: #bdc1c6;
       cursor: not-allowed;
     }
@@ -171,9 +176,6 @@
   border: 1px solid var(--optionButtonUnansweredBorder);
   background: var(--optionButtonUnansweredBackground);
   color: var(--optionButtonUnansweredText);
-
-  & .button-inner {
-  }
 
   &.button--wrong {
     border: 1px solid var(--optionButtonWrongBorder);
@@ -246,9 +248,10 @@
 
 .highlights {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  overflow: hidden;
+
 
   .highlight {
     height: 6px;

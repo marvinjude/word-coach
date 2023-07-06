@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react"
 import type { Themes } from "word-coach-common"
 
 export type UserAnswers = {
@@ -12,17 +11,7 @@ export enum QuestionTypes {
   IMAGE = "IMAGE",
 }
 
-export type Option = TextOption | ImageOption
-
-export interface TextOption {
-  text: string
-}
-
-export interface ImageOption {
-  url: string
-}
-
-export interface IQuestion {
+export interface IQuestionBase {
   /**
    * The question to be asked
    * @example
@@ -31,30 +20,17 @@ export interface IQuestion {
   question: string
 
   /**
-   * The url of the image to be displayed on the side
-   * @example
-   * "https://example.com/image.png"
-   */
-  image?: string
-
-  /**
-   * The options to be displayed
-   * @example type: "TEXT"
-   * const options = [
-   *   { text: "Lagos"},
-   *   { text: "Abuja" },
-   * ]
-   *
-   * @example type: "IMAGE"
-   * [
-   *  { url: "https://example.com/image.png" },
-   *  { url: "https://example.com/image.png" },
-   * ]
-   *
+   * The options to be displayed to the user
    * @default []
-   * @note If the type is "IMAGE", the url is required, if the type is "TEXT", the text is required
+   *
+   * @example with text
+   * const options = ["Lagos", "Abuja"]
+   *
+   * @example with images
+   * const options = ["https://example.com/image.png","https://example.com/image.png"]
+   *
    */
-  options: Array<Option>
+  options: Array<string>
 
   /**
    * The indexes of the correct answers
@@ -67,11 +43,6 @@ export interface IQuestion {
    * const answer = [0, 1]
    */
   answer: Array<number>
-
-  /**
-   * The type of question
-   */
-  type: keyof typeof QuestionTypes
 
   /**
    * The score to be awarded for this question
@@ -88,13 +59,30 @@ export interface IQuestion {
   }>
 }
 
-export interface WordCoachProps {
-  /**
-   * When using @word-coach/ai-questions, pass in the endpoint to stream questions from
-   * if specified, the `questions` prop will be ignored and the questions will be streamed from the endpoint
-   */
-  streamEndPoint?: string
+export interface ImageQuestion extends IQuestionBase {
+  type: QuestionTypes.IMAGE
+}
 
+export interface TextQuestion extends IQuestionBase {
+  type: QuestionTypes.TEXT
+}
+
+export interface TextWithImageQuestion extends IQuestionBase {
+  type: QuestionTypes.TEXT_WITH_IMAGE
+
+  /**
+   * The url of the image to be displayed on the side
+   * @example
+   * "https://example.com/image.png"
+   */
+  image: string
+}
+
+export type IQuestion = ImageQuestion | TextQuestion | TextWithImageQuestion
+
+export type IQuestions = Array<IQuestion>
+
+export interface BaseWordCoachProps {
   /**
    * Whether to show a "Next Round" button at the end of the quiz
    * @default false
@@ -108,16 +96,10 @@ export interface WordCoachProps {
   onClickNextRound?: () => void
 
   /**
-   * Whether to show a loading state, useful when fetching questions from an API
-   * @default false
-   */
-  isLoading?: boolean
-
-  /**
    * Whether to reveal the right and wrong answers when the user skips the question
    * @default true
    */
-  revealAnswerOnSkip?: boolean 
+  revealAnswerOnSkip?: boolean
 
   /**
    * Theme to be used, defaults to "nigeria"
@@ -137,11 +119,6 @@ export interface WordCoachProps {
   onEnd?: (result: { answers: Array<number>; score: number }) => void
 
   /**
-   * Whether to shuffle the questions
-   */
-  enableShuffle?: boolean
-
-  /**
    * Callback function to be called when the user selects an answer
    */
   onSelectAnswer?: (resut: {
@@ -149,7 +126,24 @@ export interface WordCoachProps {
     questionIndex: number
     currentScore: number
   }) => void
+}
 
+export interface StreamingWordCoachProps extends BaseWordCoachProps {
+  mode: "stream"
+  /**
+   *  When in stream mode, this function is called when a new question stream is received
+   */
+  onChunk?: (chunk: any) => void
+
+  /**
+   * When using @word-coach/ai-questions, pass in the endpoint to stream questions from
+   * if specified, the `questions` prop will be ignored and the questions will be streamed from the endpoint
+   */
+  streamEndPoint: string
+}
+
+export interface StaticWordCoachProps extends BaseWordCoachProps {
+  mode: "static"
   /**
    * Questions for the quiz
    * @example
@@ -157,7 +151,7 @@ export interface WordCoachProps {
         {
           type: "TEXT",
           question: "What is the capital of Nigeria?",
-          options: [{ text: "Lagos" }, { text: "Abuja" }],
+          options: ["Lagos", "Abuja"],
           answer: [1],
           score: 10,
         },
@@ -165,16 +159,29 @@ export interface WordCoachProps {
           type: "IMAGE",
           question: "Which object is bigger?",
           options: [
-            { url: "https://picsum.photos/200/300" },
-            { url: "https://picsum.photos/200/300" },
+            "https://picsum.photos/200/300",
+            "https://picsum.photos/200/300",
           ],
           answer: [1],
           score: 10,
         },
     ]
   */
-  questions?: Array<IQuestion>
+  questions: IQuestions
+
+  /**
+   * Whether to shuffle the questions
+   */
+  enableShuffle?: boolean
+
+  /**
+   * Whether to show a loading state, useful when fetching questions from an API
+   * @default false
+   */
+  isLoading?: boolean
 }
+
+export type WordCoachProps = StreamingWordCoachProps | StaticWordCoachProps
 
 export interface OptionsUI {
   currentQuestionIndex: number
@@ -186,24 +193,4 @@ export interface OptionsUI {
   question: IQuestion
 }
 
-type AppContextTypeFromWordCoachProps = Pick<
-  WordCoachProps,
-  | "questions"
-  | "onClickNextRound"
-  | "hasNextRound"
-  | "enableShuffle"
-  | "defaultScore"
-  | "onEnd"
-  | "onSelectAnswer"
-  | "isLoading"
-  | "revealAnswerOnSkip"
-  | "streamEndPoint"
->
-
 export type Screen = "game" | "end"
-
-export interface AppContextType extends AppContextTypeFromWordCoachProps {
-  userAnswers: UserAnswers
-  setScreen: React.Dispatch<React.SetStateAction<Screen>>
-  setUserAnswers: Dispatch<SetStateAction<UserAnswers>>
-}

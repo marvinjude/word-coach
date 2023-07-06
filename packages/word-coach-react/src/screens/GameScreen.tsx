@@ -13,10 +13,10 @@ import styles from "word-coach-common/styles/styles.css"
 import PhoneLink from "word-coach-common/icons/phone-link.svg"
 import Spinner from "word-coach-common/icons/spinner.svg"
 
-import { type AppContextType, QuestionTypes } from "../types"
+import { QuestionTypes } from "../types"
 
-import { AppContext } from "../context"
 import useGameEngine from "../hooks/useGameEngine"
+import { GameScreenProps } from "../WordCoach"
 
 // Move to utils and constants / common
 const MAX_NUMBER_OF_OPTION = 2
@@ -29,44 +29,37 @@ const delay = (f: () => any, timeDelay = TRANSITION_DELAY) => {
   }, timeDelay)
 }
 
-const GameScreen = () => {
+const GameScreen = ({
+  defaultScore,
+  onEnd,
+  onSelectAnswer,
+  userAnswers,
+  setScreen,
+  setUserAnswers,
+  revealAnswerOnSkip = true,
+  ...gameScreenProps
+}: GameScreenProps) => {
+  let gameEngineProps = {}
+
+  if (gameScreenProps.mode === "stream") {
+    gameEngineProps = {
+      streamEndPoint: gameScreenProps.streamEndPoint,
+      onChunk: gameScreenProps.onChunk,
+    }
+  }
+
+  if (gameScreenProps.mode === "static") {
+    gameEngineProps = {
+      staticQuestions: gameScreenProps.questions,
+    }
+  }
+
   const {
-    enableShuffle,
-    questions: staticQuestions,
-    defaultScore,
-    onEnd,
-    onSelectAnswer,
-    userAnswers,
-    setScreen,
-    setUserAnswers,
-    revealAnswerOnSkip,
-    streamEndPoint,
-    isLoading,
-  } = useContext(AppContext) as AppContextType
-
-  if (isLoading && streamEndPoint) {
-    console.warn(
-      `You are using a stream endpoint and isLoading is set to true
-      This may not be the correct prop configuration.`
-    )
-  }
-
-  if (staticQuestions && streamEndPoint)
-    throw new Error(
-      "You can't have both static questions and a stream endpoint"
-    )
-
-  if (!staticQuestions && !streamEndPoint) {
-    throw new Error(
-      "You must provide either static questions or a stream endpoint"
-    )
-  }
-
-  const { questions, hasReceivedFirstChunk, questionsCount } = useGameEngine({
-    staticQuestions,
-    streamEndPoint,
-    enableShuffle,
-  })
+    questions,
+    hasReceivedFirstChunk,
+    questionsCount,
+    isStreamingQuestions,
+  } = useGameEngine(gameEngineProps)
 
   const [scoreList, setScoreList] = useState([{ value: 0, id: Date.now() }])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -74,7 +67,21 @@ const GameScreen = () => {
   const [revealRightAndWrongAnswer, setRevealRightAndWrongAnswer] =
     useState(false)
 
-  if (isLoading || (streamEndPoint && !hasReceivedFirstChunk)) {
+  const moveToNextQuestionAvailableQuestion = useRef(false)
+
+  useEffect(() => {
+    if (moveToNextQuestionAvailableQuestion.current) {
+      moveToNextQuestionAvailableQuestion.current = false
+      gotoNextQuestion()
+    }
+  }, [questions])
+
+  if (
+    (gameScreenProps.mode === "static" && gameScreenProps.isLoading) ||
+    (gameScreenProps.mode === "stream" &&
+      gameScreenProps.streamEndPoint &&
+      !hasReceivedFirstChunk)
+  ) {
     return (
       <div className={styles.card}>
         <div className={styles.loading}>
@@ -84,7 +91,11 @@ const GameScreen = () => {
     )
   }
 
-  if (!isLoading && !questions.length) {
+  if (
+    gameScreenProps.mode === "static" &&
+    !gameScreenProps.isLoading &&
+    questions.length === 0
+  ) {
     return (
       <div className={styles.card}>
         <div className={styles.loading}>
@@ -94,21 +105,20 @@ const GameScreen = () => {
     )
   }
 
+  if (!questions) throw new Error("Question is undefined")
+
   const {
     options,
     question,
     type: questionType,
   } = questions[currentQuestionIndex]
 
-  const isLastQuestion = currentQuestionIndex === questions.length - 1
+  const isLastQuestion = currentQuestionIndex === questionsCount - 1
   const currentQuestionIsAnswered = String(currentQuestionIndex) in userAnswers
   const currendQuestionIsSkipped = skippedQuestionsIndex.current.includes(
     currentQuestionIndex.toString()
   )
 
-  /** Warnings: Just making sure your data shape is correct
-   *  TODO: Replace with PropTypes
-   */
   if (options.length > MAX_NUMBER_OF_OPTION) {
     if (isDev) {
       throw new Error(`WordCoach: The maximum number of options is 2.`)
@@ -125,6 +135,14 @@ const GameScreen = () => {
   })
 
   const gotoNextQuestion = (shouldDelay: boolean = true) => {
+    // Prevent going to next question if the question is not available yet. This is likely to happen in  (stream mode)
+    if (questions[currentQuestionIndex + 1] === undefined) {
+      // Queue an action to Move to next question when the question becomes available
+      moveToNextQuestionAvailableQuestion.current = true
+
+      return
+    }
+
     delay(
       () => {
         setCurrentQuestionIndex(prev => prev + 1)
@@ -197,8 +215,9 @@ const GameScreen = () => {
 
       const answerIndexSelected = userAnswers[questionIndex.toString()]
 
-      const selectedAnswerIsCorrect =
-        questions[questionIndex]?.answer?.includes(answerIndexSelected)
+      const selectedAnswerIsCorrect = questions[questionIndex]?.answer
+        .map(answer => Number(answer))
+        ?.includes(answerIndexSelected)
 
       return {
         wrong: hasSelectedAnswer && !selectedAnswerIsCorrect,
@@ -251,7 +270,7 @@ const GameScreen = () => {
         <div>
           <PhoneLink />
         </div>
-        <div>
+        <div className={styles.footer_center}>
           <Highlights
             dots={highlightDots}
             selectedDotIndex={currentQuestionIndex}

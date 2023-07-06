@@ -54,16 +54,17 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 
 ### @word-coach/react
 
-- [ ] Use streamed data over fake data
-- [ ] Prevent highlight overflow
-- [ ] Introduce modes ["stream|static"], throw on isLoading if in stream mode 
-- [ ] Prevent navigation if next chunk hasn't arrived
-- [ ] add streamProgress callback
+- [x] Use streamed data over fake data
+- [x] add onChunk callback
+- [x] Prevent highlight overflow
+- [x] Introduce modes ["stream|static"]
+- [x] Prevent moving or skipping if next chunk hasn't arrived, move to next when data arrives
 
 - [ ] Cleanup themes
 - [ ] Fix EndGameScreen
+
+- [ ] Throw on isLoading if in stream mode
 - [ ] General cleanup
-- [ ] Cleanup themes
 - [ ] Write test with playright
 - [ ] TS type for css & svg
 - [ ] Docs
@@ -73,7 +74,7 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 
 
 ### @word-coach/ai-questions
-- [ ] Fix undecodable chucks
+- [ ] Fix CSV parsing in Library
 - [ ] Write tests
 - [ ] Docs
 

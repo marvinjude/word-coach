@@ -6,7 +6,7 @@ import Cross from "word-coach-common/icons/cross.svg"
 import Check from "word-coach-common/icons/check.svg"
 import styles from "word-coach-common/styles/styles.css"
 
-import type { ImageOption, OptionsUI } from "../types"
+import type { OptionsUI } from "../types"
 
 const ImageOptions: React.FC<OptionsUI> = ({
   currentQuestionIndex,
@@ -23,7 +23,9 @@ const ImageOptions: React.FC<OptionsUI> = ({
         const thisOptionWasSelected =
           userAnswers[currentQuestionIndex] === index
 
-        const thisOptionIsCorrectAnswer = question.answer.includes(index)
+        const thisOptionIsCorrectAnswer = question.answer
+          .map(answer => Number(answer))
+          .includes(index)
 
         const right =
           thisOptionIsCorrectAnswer &&
@@ -40,7 +42,7 @@ const ImageOptions: React.FC<OptionsUI> = ({
             <Image
               key={index}
               onClick={() => onChooseAnswer(index)}
-              url={(option as ImageOption).url}
+              url={option}
             >
               {right && (
                 <WobbleChild>

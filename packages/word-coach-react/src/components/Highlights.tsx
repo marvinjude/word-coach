@@ -15,7 +15,10 @@ interface HighLightsProps {
 
 const HighLights: React.FC<HighLightsProps> = ({ dots, selectedDotIndex }) => {
   return (
-    <div className={styles.highlights}>
+    <motion.div
+      animate={{ marginLeft: `-${selectedDotIndex * 12}px` }}
+      className={styles.highlights}
+    >
       {dots.map((dot, index) => {
         const scale = selectedDotIndex === index ? 2 : 1
 
@@ -30,7 +33,7 @@ const HighLights: React.FC<HighLightsProps> = ({ dots, selectedDotIndex }) => {
           ></motion.span>
         )
       })}
-    </div>
+    </motion.div>
   )
 }
 

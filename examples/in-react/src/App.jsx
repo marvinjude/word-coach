@@ -3,8 +3,6 @@ import React, { useEffect } from "react"
 
 import "./styles.css"
 
-console.log("WordCoach", WordCoach)
-
 const questionsDB = [
   {
     type: "TEXT",
@@ -13,7 +11,7 @@ const questionsDB = [
 
     question: "This is the flag of which country?",
     score: 30,
-    options: [{ text: "UK" }, { text: "USA" }],
+    options: ["UK", "USA"],
     answer: [0],
     whyAnswer: [
       {
@@ -33,7 +31,7 @@ const questionsDB = [
 
     question: "What animal is this?",
     score: 30,
-    options: [{ text: "Squirell" }, { text: "Rabbit" }],
+    options: ["Squirell", "Rabbit"],
     answer: [0],
     whyAnswer: [
       {
@@ -50,7 +48,7 @@ const questionsDB = [
     type: "TEXT",
     question: "Which of these is the flag of Nigeria?",
     score: 30,
-    options: [{ text: "🇳🇬🇳🇬🇳🇬" }, { text: "🇬🇭🇬🇭🇬🇭" }],
+    options: ["🇳🇬🇳🇬🇳🇬", "🇬🇭🇬🇭🇬🇭"],
     answer: [0],
     whyAnswer: [
       {
@@ -67,7 +65,7 @@ const questionsDB = [
     type: "TEXT",
     question: "What does this emoji mean '😎'?",
     score: 30,
-    options: [{ text: "Crazy" }, { text: "Cool" }],
+    options: ["Crazy", "Cool"],
     answer: [1],
     whyAnswer: [
       {
@@ -87,7 +85,7 @@ const questionsDB = [
 
     question: "What's the full meaning of 'UK'?",
     score: 30,
-    options: [{ text: "United Kingdom" }, { text: "Ultra Kingdom" }],
+    options: ["United Kingdom", "Ultra Kingdom"],
     answer: [0],
     whyAnswer: [
       {
@@ -105,12 +103,8 @@ const questionsDB = [
     question: "Which picture was taken in Ecuardor",
     score: 30,
     options: [
-      {
-        url: "https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      },
-      {
-        url: "https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-      },
+      "https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
     ],
     answer: [1],
     whyAnswer: [
@@ -128,7 +122,7 @@ const questionsDB = [
 
 function App() {
   const [isLoading, setIsLoading] = React.useState(true)
-  const [questions, setQuestions] = React.useState<typeof questionsDB>([])
+  const [questions, setQuestions] = React.useState([])
 
   const fetchQuestions = async () => {
     await new Promise(resolve => setTimeout(() => resolve(true), 2000))
@@ -163,6 +157,7 @@ function App() {
         }}
       >
         <WordCoach
+          mode="static"
           onClickNextRound={fetchQuestions}
           hasNextRound={true}
           isLoading={isLoading}

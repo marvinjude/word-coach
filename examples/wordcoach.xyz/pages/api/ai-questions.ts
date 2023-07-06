@@ -13,12 +13,10 @@ export default async function handler(
   const API_KEY = process.env.OPENAI_SECRET as string
   const questionCount = 7
 
-  const customGetImageFunction = async () => "customGetImageFunction RESULT"
-
   const aiQuestions = new AIQuestions(API_KEY)
 
   const questionsStream = await aiQuestions.getQuestionsStream({
-    category: "Philosophy",
+    description: "the bible",
     length: questionCount,
   })
 

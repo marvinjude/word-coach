@@ -9,21 +9,25 @@ export enum QuestionTypes {
   IMAGE = "IMAGE",
 }
 
-const TRAINING_DATA_CSV_HEADER = `questionIndex,type,question,image,score,options,answer`
+const TRAINING_DATA_CSV_HEADER = `questionIndex,type,question,image,score,options.0,options.1,answer.0`
 
 const SYSEM_INSTRUCTIONS = `
-You are a question generator for an app, You're required to generate a CSV like the below:
+You are a question generator for an app, You're required to generate a CSV like the below without the header:
 
 ${TRAINING_DATA_CSV_HEADER}
-0,${QuestionTypes.TEXT},"How many days make up a week",NULL,30,"7, 11","0"
-1,${QuestionTypes.TEXT_WITH_IMAGE},"Who invented this device?","A Radio",30,"Reginald A. Fessenden, Bill Gates","0"
-3,${QuestionTypes.TEXT_WITH_IMAGE},"Who is this spoon called?","A Tea spoon",30,"Table Spoon, Tea Spoon","1"
-4,${QuestionTypes.IMAGE},"Which of these is the Facebook logo?",NULL,30,"Facebook logo, Google logo","0"
+0,${QuestionTypes.TEXT},"How many days make up a week",,30,"11","7",1
+1,${QuestionTypes.TEXT_WITH_IMAGE},"Who invented this device?","A Radio",30,"Reginald A. Fessenden","Bill Gates",0
+3,${QuestionTypes.TEXT_WITH_IMAGE},"Who is this spoon called?","A Tea spoon",30,"Table Spoon","Tea Spoon",1
+4,${QuestionTypes.IMAGE},"Which of these is the Facebook logo?",,30,"Facebook logo","Google logo",0
+5,${QuestionTypes.TEXT_WITH_IMAGE},"Who is the name of this famous landmark","effiel tower image",30,"Standing Tower","Eiffel Tower",1
+6,${QuestionTypes.IMAGE},"Which of this is stones is diamond?",,30,"Topaz","Diamond",1
+7,${QuestionTypes.IMAGE},"Which of these is the iPhone 14?",,30,"iPhone 14 image","iphone X image",0
 
 These are the instructions to follow:
-- For questions of ${QuestionTypes.TEXT_WITH_IMAGE} type questions, make sure the question is about the image
-- Don't inlcude the CSV header
+- For questions of ${QuestionTypes.TEXT_WITH_IMAGE} type, make sure the question is about the image
+- Don't include the CSV header in your result
 - Make sure you only respond with the CSV requested and nothing more
+- Each question should have 2 options
 `
 
 export class AIQuestions {
@@ -115,6 +119,7 @@ export class AIQuestions {
             }
 
             if (csvLine.endsWith("\n")) {
+              console.log("csvLine", csvLine)
               const [question] = await csv().fromString(
                 `${TRAINING_DATA_CSV_HEADER}\n${csvLine.replace(/\n$/, "")}`
               )
@@ -147,19 +152,19 @@ export class AIQuestions {
   }
 
   getUserInstructions({
-    category,
+    description,
     length,
     types,
-    optionsLength,
   }: {
-    category: string
+    description: string
     length: number
     types: string[]
-    optionsLength: number
   }) {
     return `Based on the format specified above, Generate ${length} questions of type: ${types?.join(
       ","
-    )} about ${category}.Each question should have ${optionsLength} comma separated options`
+    )}. To generate the questions, think about 10 non common topics in your head,  about ${description} and pick one of the topics randomly
+    All questions should be about the topic you picked.
+   `
   }
 
   /**
@@ -168,22 +173,20 @@ export class AIQuestions {
    */
   static async replaceImageDescriptionWithUrl(question: any): Promise<any> {
     if (question.type === QuestionTypes.TEXT_WITH_IMAGE) {
-      const [imageURL] = await queryToImageURLs(question.image)
-      return { ...question, image: imageURL.original }
+      const imageURLs = await queryToImageURLs(question.image)
+      return { ...question, image: imageURLs[1].original }
     }
 
     if (question.type === QuestionTypes.IMAGE) {
-      const imageURLsPromises = question.options
-        .split(",")
-        .map((option: any) => queryToImageURLs(option))
+      const imageURLsPromises = question.options.map((option: any) =>
+        queryToImageURLs(option)
+      )
 
       const results = await Promise.allSettled(imageURLsPromises)
 
       return {
         ...question,
-        options: results
-          .map((result: any) => result.value[0].original)
-          .join(","),
+        options: results.map((result: any) => result.value[1].original),
       }
     }
   }
@@ -194,19 +197,17 @@ export class AIQuestions {
    * @returns
    */
   async getQuestionsStream({
-    category,
+    description,
     length,
     types = [
       QuestionTypes.IMAGE,
       QuestionTypes.TEXT,
       QuestionTypes.TEXT_WITH_IMAGE,
     ],
-    optionsLength = 2,
   }: {
-    category: string
+    description: string
     length: number
     types?: string[]
-    optionsLength?: number
   }): Promise<ReadableStream<Uint8Array> | null> {
     const allQuestionTypes = Object.values(QuestionTypes)
     const typesString = types || allQuestionTypes
@@ -221,10 +222,9 @@ export class AIQuestions {
         {
           role: "user",
           content: this.getUserInstructions({
-            category,
+            description,
             length,
             types: typesString,
-            optionsLength,
           }),
         },
       ],
