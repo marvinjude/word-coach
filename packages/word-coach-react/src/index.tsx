@@ -1,5 +1,5 @@
 export { WordCoach } from "./WordCoach"
-export type { WordCoachProps } from "./types"
+export * from "./types"
 
 export default function () {
   console.warn(

@@ -54,12 +54,8 @@ const GameScreen = ({
     }
   }
 
-  const {
-    questions,
-    hasReceivedFirstChunk,
-    questionsCount,
-    isStreamingQuestions,
-  } = useGameEngine(gameEngineProps)
+  const { questions, hasReceivedFirstChunk, questionsCount } =
+    useGameEngine(gameEngineProps)
 
   const [scoreList, setScoreList] = useState([{ value: 0, id: Date.now() }])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -67,11 +63,11 @@ const GameScreen = ({
   const [revealRightAndWrongAnswer, setRevealRightAndWrongAnswer] =
     useState(false)
 
-  const moveToNextQuestionAvailableQuestion = useRef(false)
+  const moveToNextQuestionWhenAvailable = useRef(false)
 
   useEffect(() => {
-    if (moveToNextQuestionAvailableQuestion.current) {
-      moveToNextQuestionAvailableQuestion.current = false
+    if (moveToNextQuestionWhenAvailable.current) {
+      moveToNextQuestionWhenAvailable.current = false
       gotoNextQuestion()
     }
   }, [questions])
@@ -94,15 +90,9 @@ const GameScreen = ({
   if (
     gameScreenProps.mode === "static" &&
     !gameScreenProps.isLoading &&
-    questions.length === 0
+    !gameScreenProps.questions?.length
   ) {
-    return (
-      <div className={styles.card}>
-        <div className={styles.loading}>
-          <p>There are no questions</p>
-        </div>
-      </div>
-    )
+    return <div className={styles.card}></div>
   }
 
   if (!questions) throw new Error("Question is undefined")
@@ -138,8 +128,7 @@ const GameScreen = ({
     // Prevent going to next question if the question is not available yet. This is likely to happen in  (stream mode)
     if (questions[currentQuestionIndex + 1] === undefined) {
       // Queue an action to Move to next question when the question becomes available
-      moveToNextQuestionAvailableQuestion.current = true
-
+      moveToNextQuestionWhenAvailable.current = true
       return
     }
 
@@ -181,7 +170,7 @@ const GameScreen = ({
       questions[currentQuestionIndex].answer.includes(optionIndex)
 
     const scoreForQuestion =
-      questions[currentQuestionIndex].score || defaultScore || 1
+      +questions[currentQuestionIndex].score || defaultScore || 1
 
     const newScore = answerIsCorrect
       ? scoreList[0].value + scoreForQuestion

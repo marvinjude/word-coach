@@ -59,19 +59,17 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 - [x] Prevent highlight overflow
 - [x] Introduce modes ["stream|static"]
 - [x] Prevent moving or skipping if next chunk hasn't arrived, move to next when data arrives
+- [ ] Fix EndGameScreen 
 
-- [ ] Cleanup themes
-- [ ] Fix EndGameScreen
-
+- [ ] Cleanup themes - Make sure all themes looks nice
 - [ ] Throw on isLoading if in stream mode
-- [ ] General cleanup
+- [ ] General code cleanup
 - [ ] Write test with playright
 - [ ] TS type for css & svg
-- [ ] Docs
-- [ ] Simple Codesandbox example
 - [ ] Ship to NPM
-- [ ] Deploy same in react to codesandbox(setup pipline for that)
-
+- [ ] Deploy same in-react example to codesandbox(setup pipline for that)
+- [ ] Switch styling solution
+- [ ] Docs
 
 ### @word-coach/ai-questions
 - [ ] Fix CSV parsing in Library
@@ -79,6 +77,9 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 - [ ] Docs
 
 ### wordcoach.xyz
+- [x] Build UI for mode and render based on props based on mode
+
+- [ ] Build UI for progress
 - [ ] Copy Code Feature
   - [ ] React
   - [ ] Web Component
@@ -86,3 +87,4 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 - [ ] Block Requests not coming from word-coach-xyz
 - [ ] Incoporate modes
 - [ ] Show stream progress in stream mode
+- [ ] Debounce stremEndPoint input element

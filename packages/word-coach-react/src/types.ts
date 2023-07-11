@@ -1,20 +1,21 @@
 import type { Themes } from "word-coach-common"
 
+//Todo: move type to common package
+export const QuestionTypes = {
+  TEXT: "TEXT",
+  TEXT_WITH_IMAGE: "TEXT_WITH_IMAGE",
+  IMAGE: "IMAGE",
+} as const
+
+export type QuestionTypesKeys = keyof typeof QuestionTypes
+
 export type UserAnswers = {
   [key: string]: number
-}
-
-//Todo: move type to common package
-export enum QuestionTypes {
-  TEXT = "TEXT",
-  TEXT_WITH_IMAGE = "TEXT_WITH_IMAGE",
-  IMAGE = "IMAGE",
 }
 
 export interface IQuestionBase {
   /**
    * The question to be asked
-   * @example
    * const question = "What is the capital of Nigeria?"
    */
   question: string
@@ -60,15 +61,15 @@ export interface IQuestionBase {
 }
 
 export interface ImageQuestion extends IQuestionBase {
-  type: QuestionTypes.IMAGE
+  type: typeof QuestionTypes.IMAGE
 }
 
 export interface TextQuestion extends IQuestionBase {
-  type: QuestionTypes.TEXT
+  type: typeof QuestionTypes.TEXT
 }
 
 export interface TextWithImageQuestion extends IQuestionBase {
-  type: QuestionTypes.TEXT_WITH_IMAGE
+  type: typeof QuestionTypes.TEXT_WITH_IMAGE
 
   /**
    * The url of the image to be displayed on the side
