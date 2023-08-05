@@ -30,7 +30,7 @@ Word Coach is simply a replica of the [Google word coach](https://www.seoexperti
 
 I've built an interactived demo to help you see the comp
 
-![](Screenshot%202023-08-05%20at%2015.07.33.png)
+![](./demo-screenshot.png)
 
 [Go to Demo](https://wordcoach.xyz)
 
