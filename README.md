@@ -1,11 +1,17 @@
 <p align="center">
-  <a href="https://nextjs.org">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_dark_background.png">
-      <img src="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_light_background.png" height="128">
-    </picture>
-    <h1 align="center">Word-Coach</h1>
-  </a>
+  <br />
+  <br />
+  <br />
+  <img src="./word-coach-logo.png" width="100" height="auto" alt="dropd logo" align="center" />
+  <br />
+  <br />
+  <h3 align="center">A quiz component</h3>
+
+  <p align="center">
+  <a href="https://npm.im/dropd-component"><img src="https://img.shields.io/npm/v/dropd-component.svg?color=brightgreen&style=flat-square" alt="Package version."></a>
+  <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PR(s)-welcome-brightgreen.svg?style=flat-square" alt="Make a pull request."></a>
+  <a href="http://www.firsttimersonly.com"><img src="https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square" alt="First-timers Friendly"></a>
+  </p>
 </p>
 
 <p align="center">
@@ -20,31 +26,32 @@
 
 Word Coach is simply a replica of the [Google word coach](https://www.seoexpertindelhi.in/google-word-coach/) built in React. You can see the orginal Google Word coach in action by searching "Google Word coach" on Google via **your mobile device**. This project may only be used for learning purposes as the initial idea is from Google.
 
-## Examples
+## Demo
 
-We have usage examples on CodeSandbox:
+I've built an interactived demo to help you see the comp
 
-- [React](https://codesandbox.com/iiheu3hg7e83)
+![](Screenshot%202023-08-05%20at%2015.07.33.png)
+
+[Go to Demo](https://wordcoach.xyz)
 
 ## Installation
-
-React:
 
 ```bash
 yarn add @word-coah/react
 ```
 
-## Framework specific docs
-
-- [React](https://github.com/marvinjude/word-coach/packages/word-coach-react)
-
 ## Contributing
 
-If you feel ambitious and you'll like to write Word Coach in another library, I'm happy to assist you in your contribution. Feel free to [send an email](mailto::marvinjudehk@gmail.com).
+All contributions are welcome, see [Projects](https://github.com/marvinjude/projects/) to see potential contributions.
 
-This project is a monorepo and each package is stored in the [packages directory](https://github.com/marvinjude/word-coach/packages/).
+To setup this project on your machine
 
-TODO: Write more details about contributing a package...
+- Fork Repo on your machine
+- install pnpm globally(npm i -g pnpm)
+- install packages (pnpm i)
+- Watch all packages (pnpm watch)
+
+To test the effect of code updates, you can spin up `example/wordcoach.xyz` with `pnpm start`. Any code update you make should reflect accordingly.
 
 ## 📝 License
 
@@ -53,6 +60,7 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 ## Todo
 
 ### All
+
 - [ ] Fix Eslint
 
 ### @word-coach/react
