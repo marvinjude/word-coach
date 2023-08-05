@@ -39,14 +39,13 @@
   background-color: var(--containerBackground);
   border-radius: 0.5rem;
   color: var(--containerForeground);
-  border: var(--containerBorder);
+  border: 1px solid var(--containerBorder);
   overflow: hidden;
   width: 390px;
   min-height: 265px;
   position: relative;
   text-align: center;
-  border: 1px solid rgb(227, 222, 222);
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  box-shadow: var(--containerBackgroundBoxShadow);
   display: flex;
   flex-direction: column;
 
@@ -251,7 +250,6 @@
   justify-content: flex-start;
   align-items: center;
   overflow: hidden;
-
 
   .highlight {
     height: 6px;

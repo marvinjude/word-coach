@@ -11,12 +11,12 @@ export default async function handler(
   response: NextApiResponse<Data>
 ) {
   const API_KEY = process.env.OPENAI_SECRET as string
-  const questionCount = 7
+  const questionCount = 10
 
   const aiQuestions = new AIQuestions(API_KEY)
 
   const questionsStream = await aiQuestions.getQuestionsStream({
-    description: "the bible",
+    description: "cars",
     length: questionCount,
   })
 

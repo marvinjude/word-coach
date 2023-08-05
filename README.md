@@ -52,6 +52,9 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 
 ## Todo
 
+### All
+- [ ] Fix Eslint
+
 ### @word-coach/react
 
 - [x] Use streamed data over fake data
@@ -59,27 +62,34 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 - [x] Prevent highlight overflow
 - [x] Introduce modes ["stream|static"]
 - [x] Prevent moving or skipping if next chunk hasn't arrived, move to next when data arrives
-- [ ] Fix EndGameScreen 
+- [x] Cleanup themes - Make sure all themes looks nice
+- [x] Fix EndGameScreen
+- [x] Fetch again on "Next Round" for stream mode
 
-- [ ] Cleanup themes - Make sure all themes looks nice
-- [ ] Throw on isLoading if in stream mode
+- [x] Fully wire props with UI
+- [ ] Back state up in localStorage
 - [ ] General code cleanup
 - [ ] Write test with playright
 - [ ] TS type for css & svg
 - [ ] Ship to NPM
+- [ ] Compile to web component
 - [ ] Deploy same in-react example to codesandbox(setup pipline for that)
 - [ ] Switch styling solution
 - [ ] Docs
 
 ### @word-coach/ai-questions
+
 - [ ] Fix CSV parsing in Library
 - [ ] Write tests
 - [ ] Docs
+- [ ] image fetching may messs with order of question index in stream
+- [ ] Add "why answer"
 
 ### wordcoach.xyz
-- [x] Build UI for mode and render based on props based on mode
 
-- [ ] Build UI for progress
+- [x] Build UI for mode and render based on props based on mod
+- [x] Build UI for progress
+
 - [ ] Copy Code Feature
   - [ ] React
   - [ ] Web Component
@@ -88,3 +98,4 @@ Licensed under the [MIT License](https://github.com/marvinjude/word-coach/licens
 - [ ] Incoporate modes
 - [ ] Show stream progress in stream mode
 - [ ] Debounce stremEndPoint input element
+- [ ] Add Sentry to Catch Errors in Production

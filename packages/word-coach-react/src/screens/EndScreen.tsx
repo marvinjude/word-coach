@@ -139,13 +139,14 @@ const ScoreArea = ({
 }
 
 const EndScreen = ({
+  mode,
   questions,
   hasNextRound,
   onClickNextRound,
   userAnswers,
   setUserAnswers,
   setScreen,
-  ...endScreenProps
+  refetch,
 }: EndScreenProps) => {
   const correctAnswerCount = questions.reduce((prev, cur, index) => {
     const answerForQuestionIsCorrrect = cur.answer.includes(userAnswers[index])
@@ -159,8 +160,13 @@ const EndScreen = ({
 
   const handleClickNextRound = () => {
     callbackCaller(onClickNextRound)
+
     setScreen("game")
     setUserAnswers({})
+
+    if (mode === "stream") {
+      if (refetch) refetch()
+    }
   }
 
   return (

@@ -11,11 +11,8 @@ import { isDev } from "../utils/isDev"
 
 import styles from "word-coach-common/styles/styles.css"
 import PhoneLink from "word-coach-common/icons/phone-link.svg"
-import Spinner from "word-coach-common/icons/spinner.svg"
 
-import { QuestionTypes } from "../types"
-
-import useGameEngine from "../hooks/useGameEngine"
+import { IQuestion, QuestionTypes } from "../types"
 import { GameScreenProps } from "../WordCoach"
 
 // Move to utils and constants / common
@@ -29,6 +26,29 @@ const delay = (f: () => any, timeDelay = TRANSITION_DELAY) => {
   }, timeDelay)
 }
 
+const inGamevalidator = ({
+  options,
+  questions,
+}: {
+  options: IQuestion["options"]
+  questions: IQuestion[]
+}) => {
+  if (options.length > MAX_NUMBER_OF_OPTION) {
+    if (isDev) {
+      console.warn(`WordCoach: The maximum number of options is 2.`)
+    }
+  }
+
+  questions.forEach((question, questionIndex) => {
+    question.answer.forEach(answer => {
+      if (answer > MAX_NUMBER_OF_OPTION) {
+        const errorText = `WordCoach: ${answer} is an incorrect answer in Question ${questionIndex}: ${question.question}.`
+        throw new Error(errorText)
+      }
+    })
+  })
+}
+
 const GameScreen = ({
   defaultScore,
   onEnd,
@@ -36,27 +56,10 @@ const GameScreen = ({
   userAnswers,
   setScreen,
   setUserAnswers,
+  questions,
+  questionsCount,
   revealAnswerOnSkip = true,
-  ...gameScreenProps
 }: GameScreenProps) => {
-  let gameEngineProps = {}
-
-  if (gameScreenProps.mode === "stream") {
-    gameEngineProps = {
-      streamEndPoint: gameScreenProps.streamEndPoint,
-      onChunk: gameScreenProps.onChunk,
-    }
-  }
-
-  if (gameScreenProps.mode === "static") {
-    gameEngineProps = {
-      staticQuestions: gameScreenProps.questions,
-    }
-  }
-
-  const { questions, hasReceivedFirstChunk, questionsCount } =
-    useGameEngine(gameEngineProps)
-
   const [scoreList, setScoreList] = useState([{ value: 0, id: Date.now() }])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const skippedQuestionsIndex = useRef<string[]>([])
@@ -72,36 +75,16 @@ const GameScreen = ({
     }
   }, [questions])
 
-  if (
-    (gameScreenProps.mode === "static" && gameScreenProps.isLoading) ||
-    (gameScreenProps.mode === "stream" &&
-      gameScreenProps.streamEndPoint &&
-      !hasReceivedFirstChunk)
-  ) {
-    return (
-      <div className={styles.card}>
-        <div className={styles.loading}>
-          <Spinner />
-        </div>
-      </div>
-    )
-  }
-
-  if (
-    gameScreenProps.mode === "static" &&
-    !gameScreenProps.isLoading &&
-    !gameScreenProps.questions?.length
-  ) {
-    return <div className={styles.card}></div>
-  }
-
-  if (!questions) throw new Error("Question is undefined")
+  const question: IQuestion = questions[currentQuestionIndex]
 
   const {
     options,
-    question,
+    question: questionText,
     type: questionType,
-  } = questions[currentQuestionIndex]
+  }: IQuestion = question
+
+  //Todo: Fix wassteful calls
+  inGamevalidator({ options, questions })
 
   const isLastQuestion = currentQuestionIndex === questionsCount - 1
   const currentQuestionIsAnswered = String(currentQuestionIndex) in userAnswers
@@ -109,25 +92,10 @@ const GameScreen = ({
     currentQuestionIndex.toString()
   )
 
-  if (options.length > MAX_NUMBER_OF_OPTION) {
-    if (isDev) {
-      throw new Error(`WordCoach: The maximum number of options is 2.`)
-    }
-  }
-
-  questions.forEach((question, questionIndex) => {
-    question.answer.forEach(answer => {
-      if (answer > MAX_NUMBER_OF_OPTION) {
-        const errorText = `WordCoach: ${answer} is an incorrect answer in Question ${questionIndex}: ${question.question}.`
-        throw new Error(errorText)
-      }
-    })
-  })
-
   const gotoNextQuestion = (shouldDelay: boolean = true) => {
     // Prevent going to next question if the question is not available yet. This is likely to happen in  (stream mode)
     if (questions[currentQuestionIndex + 1] === undefined) {
-      // Queue an action to Move to next question when the question becomes available
+      // Queue an action to move to next question when the question becomes available
       moveToNextQuestionWhenAvailable.current = true
       return
     }
@@ -166,11 +134,9 @@ const GameScreen = ({
   const onChooseAnswer = (optionIndex: number) => {
     if (currentQuestionIsAnswered || currendQuestionIsSkipped) return
 
-    const answerIsCorrect =
-      questions[currentQuestionIndex].answer.includes(optionIndex)
+    const answerIsCorrect = question.answer.includes(optionIndex)
 
-    const scoreForQuestion =
-      +questions[currentQuestionIndex].score || defaultScore || 1
+    const scoreForQuestion = +question.score || defaultScore || 1
 
     const newScore = answerIsCorrect
       ? scoreList[0].value + scoreForQuestion
@@ -198,21 +164,23 @@ const GameScreen = ({
     }
   }
 
-  const highlightDots = Array.from(Array(questionsCount)).map(
-    (_, questionIndex) => {
-      const hasSelectedAnswer = String(questionIndex) in userAnswers
+  const highlightDots = useMemo(
+    () =>
+      Array.from(Array(questionsCount)).map((_, questionIndex) => {
+        const hasSelectedAnswer = String(questionIndex) in userAnswers
 
-      const answerIndexSelected = userAnswers[questionIndex.toString()]
+        const answerIndexSelected = userAnswers[questionIndex.toString()]
 
-      const selectedAnswerIsCorrect = questions[questionIndex]?.answer
-        .map(answer => Number(answer))
-        ?.includes(answerIndexSelected)
+        const selectedAnswerIsCorrect = questions[questionIndex]?.answer
+          .map(answer => Number(answer))
+          ?.includes(answerIndexSelected)
 
-      return {
-        wrong: hasSelectedAnswer && !selectedAnswerIsCorrect,
-        right: hasSelectedAnswer && selectedAnswerIsCorrect,
-      }
-    }
+        return {
+          wrong: hasSelectedAnswer && !selectedAnswerIsCorrect,
+          right: hasSelectedAnswer && selectedAnswerIsCorrect,
+        }
+      }),
+    [questionsCount, userAnswers, questions]
   )
 
   return (
@@ -229,7 +197,7 @@ const GameScreen = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: -200 }}
       >
-        <p className={styles.question}>{question}</p>
+        <p className={styles.question}>{questionText}</p>
         {questionType === QuestionTypes.IMAGE && (
           <ImageOptions
             currentQuestionIndex={currentQuestionIndex}
@@ -238,7 +206,7 @@ const GameScreen = ({
             revealRightAndWrongAnswer={revealRightAndWrongAnswer}
             currentQuestionIsAnswered={currentQuestionIsAnswered}
             options={options}
-            question={questions[currentQuestionIndex]}
+            question={question}
           />
         )}
 
@@ -251,7 +219,7 @@ const GameScreen = ({
             revealRightAndWrongAnswer={revealRightAndWrongAnswer}
             currentQuestionIsAnswered={currentQuestionIsAnswered}
             options={options}
-            question={questions[currentQuestionIndex]}
+            question={question}
           />
         )}
       </motion.div>

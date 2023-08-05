@@ -28,6 +28,7 @@ These are the instructions to follow:
 - Don't include the CSV header in your result
 - Make sure you only respond with the CSV requested and nothing more
 - Each question should have 2 options
+- questionIndex should be ordered
 `
 
 export class AIQuestions {
@@ -97,6 +98,7 @@ export class AIQuestions {
           const message = line.replace(/^data: /, "")
 
           if (message === "[DONE]") {
+            console.log("csvLine", csvLine)
             const [question] = await csv().fromString(
               `${TRAINING_DATA_CSV_HEADER}\n${csvLine.replace(/\n$/, "")}`
             )

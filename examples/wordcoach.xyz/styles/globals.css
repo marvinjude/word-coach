@@ -6,6 +6,80 @@
   --offset: calc(var(--btn-size) / 10);
 }
 
+@tailwind components;
+/*spinner*/
+.ios-spinner {
+  fill: #868686;
+}
+.ios-spinner path:nth-of-type(1) {
+  -webkit-animation: pulse 1s infinite linear;
+  animation: pulse 1s infinite linear;
+}
+.ios-spinner path:nth-of-type(2) {
+  -webkit-animation: pulse 1s -0.083s infinite linear;
+  animation: pulse 1s -0.083s infinite linear;
+}
+.ios-spinner path:nth-of-type(3) {
+  -webkit-animation: pulse 1s -0.166s infinite linear;
+  animation: pulse 1s -0.166s infinite linear;
+}
+.ios-spinner path:nth-of-type(4) {
+  -webkit-animation: pulse 1s -0.249s infinite linear;
+  animation: pulse 1s -0.249s infinite linear;
+}
+.ios-spinner path:nth-of-type(5) {
+  -webkit-animation: pulse 1s -0.332s infinite linear;
+  animation: pulse 1s -0.332s infinite linear;
+}
+.ios-spinner path:nth-of-type(6) {
+  -webkit-animation: pulse 1s -0.415s infinite linear;
+  animation: pulse 1s -0.415s infinite linear;
+}
+.ios-spinner path:nth-of-type(7) {
+  -webkit-animation: pulse 1s -0.498s infinite linear;
+  animation: pulse 1s -0.498s infinite linear;
+}
+.ios-spinner path:nth-of-type(8) {
+  -webkit-animation: pulse 1s -0.581s infinite linear;
+  animation: pulse 1s -0.581s infinite linear;
+}
+.ios-spinner path:nth-of-type(9) {
+  -webkit-animation: pulse 1s -0.664s infinite linear;
+  animation: pulse 1s -0.664s infinite linear;
+}
+.ios-spinner path:nth-of-type(10) {
+  -webkit-animation: pulse 1s -0.747s infinite linear;
+  animation: pulse 1s -0.747s infinite linear;
+}
+.ios-spinner path:nth-of-type(11) {
+  -webkit-animation: pulse 1s -0.83s infinite linear;
+  animation: pulse 1s -0.83s infinite linear;
+}
+.ios-spinner path:nth-of-type(12) {
+  -webkit-animation: pulse 1s -0.913s infinite linear;
+  animation: pulse 1s -0.913s infinite linear;
+}
+
+@-webkit-keyframes pulse {
+  50% {
+    fill: #868686;
+  }
+  to {
+    fill: rgba(134, 134, 134, 0.4);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    fill: #868686;
+  }
+  to {
+    fill: rgba(134, 134, 134, 0.4);
+  }
+}
+/*spinner*/
+
+/**fancy button**/
 @property --border-x {
   syntax: "<length>";
   inherits: false;
@@ -109,7 +183,8 @@
   }
 }
 
-@tailwind components;
+/**fancy button**/
+
 @tailwind utilities;
 
 @font-face {
