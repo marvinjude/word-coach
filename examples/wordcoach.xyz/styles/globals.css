@@ -189,14 +189,14 @@
 
 @font-face {
   font-family: "Dank Mono";
-  src: url("./fonts/DankMono/Dank\ Mono\ Regular.otf") format("otf");
+  src: url("/fonts/DankMono/Dank\ Mono\ Regular.otf") format("otf");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Dank Mono";
-  src: url("./fonts/DankMono/Dank\ Mono\ Italic.otf") format("otf");
+  src: url("/fonts/DankMono/Dank\ Mono\ Italic.otf") format("otf");
   font-weight: normal;
   font-style: italic;
 }

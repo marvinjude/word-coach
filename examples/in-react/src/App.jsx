@@ -1,4 +1,4 @@
-import { WordCoach } from "word-coach-react"
+import { WordCoach } from "@word-coach/react"
 import React, { useEffect } from "react"
 
 import "./styles.css"

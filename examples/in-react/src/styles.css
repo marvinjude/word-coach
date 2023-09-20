@@ -1,5 +1,7 @@
-#root,
-body {
-  padding: 0px;
+
+boy {
+  color: brown;
   margin: 0px;
+  color:red;
+  border-color: aqua;
 }

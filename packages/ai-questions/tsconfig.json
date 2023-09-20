@@ -1,31 +1,9 @@
 {
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "commonjs",
-      "sourceMap": true,
-    },
-    "include": [
-      "test/**/*"
-    ]
-  },
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "include": ["src", "types"],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "target": "esnext",
     "module": "esnext",
-    "declaration": true,
-    "declarationDir": "types",
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "strict": true
-  },
-  "include": [
-    "@types/**/*",
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "allowImportingTsExtensions": false,
+    "moduleResolution": "node"
+  }
 }

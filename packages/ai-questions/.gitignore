@@ -1,8 +1,4 @@
-node_modules
-.DS_Store
-*-lock.*
-*.lock
 *.log
-
-/dist
-/types
+.DS_Store
+node_modules
+dist

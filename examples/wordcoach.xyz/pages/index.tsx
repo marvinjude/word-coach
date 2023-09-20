@@ -1,484 +1,14 @@
-import { WordCoach, IQuestions, WordCoachProps } from "word-coach-react"
+import { WordCoach, IQuestions, WordCoachProps } from "@word-coach/react"
 import React, { useEffect, useState } from "react"
-import Field from "@/ui/Field"
+import Field from "@/components/Field"
+import CopyCode from "@/components/CopyCode"
 import type { IControlsState, IPropDefinitions } from "@/types"
-import useLocalStorage from "@/utils/hooks/useLocalStorage"
-
-const questionsDB: IQuestions = [
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-
-    question: "What's the full meaning of 'UK'?",
-    score: 30,
-    options: [
-      "United Kingdom of UK edehdjhejhd",
-      "Ultra Kingdom of UKE dhjedjedeg",
-    ],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/510px-Flag_of_the_United_Kingdom_%281-2%29.svg.png",
-
-    question: "This is the flag of which country?",
-    score: 30,
-    options: ["UK", "USA"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://img.freepik.com/free-vector/cute-squirrel-standing-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium_138676-6545.jpg?w=2000",
-
-    question: "What animal is this?",
-    score: 30,
-    options: ["Squirell", "Rabbit"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "Which of these is the flag of Nigeria?",
-    score: 30,
-    options: ["🇳🇬🇳🇬🇳🇬", "🇬🇭🇬🇭🇬🇭"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "What does this emoji mean '😎'?",
-    score: 30,
-    options: ["Crazy", "Cool"],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "IMAGE",
-    question: "Which picture was taken in Ecuardor",
-    score: 30,
-    options: [
-      `https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`,
-      `https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500`,
-    ],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-
-    question: "What's the full meaning of 'UK'?",
-    score: 30,
-    options: [
-      "United Kingdom of UK edehdjhejhd",
-      "Ultra Kingdom of UKE dhjedjedeg",
-    ],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/510px-Flag_of_the_United_Kingdom_%281-2%29.svg.png",
-
-    question: "This is the flag of which country?",
-    score: 30,
-    options: ["UK", "USA"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://img.freepik.com/free-vector/cute-squirrel-standing-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium_138676-6545.jpg?w=2000",
-
-    question: "What animal is this?",
-    score: 30,
-    options: ["Squirell", "Rabbit"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "Which of these is the flag of Nigeria?",
-    score: 30,
-    options: ["🇳🇬🇳🇬🇳🇬", "🇬🇭🇬🇭🇬🇭"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "What does this emoji mean '😎'?",
-    score: 30,
-    options: ["Crazy", "Cool"],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "IMAGE",
-    question: "Which picture was taken in Ecuardor",
-    score: 30,
-    options: [
-      `https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`,
-      `https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500`,
-    ],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-
-    question: "What's the full meaning of 'UK'?",
-    score: 30,
-    options: [
-      "United Kingdom of UK edehdjhejhd",
-      "Ultra Kingdom of UKE dhjedjedeg",
-    ],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/510px-Flag_of_the_United_Kingdom_%281-2%29.svg.png",
-
-    question: "This is the flag of which country?",
-    score: 30,
-    options: ["UK", "USA"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://img.freepik.com/free-vector/cute-squirrel-standing-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium_138676-6545.jpg?w=2000",
-
-    question: "What animal is this?",
-    score: 30,
-    options: ["Squirell", "Rabbit"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "Which of these is the flag of Nigeria?",
-    score: 30,
-    options: ["🇳🇬🇳🇬🇳🇬", "🇬🇭🇬🇭🇬🇭"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "What does this emoji mean '😎'?",
-    score: 30,
-    options: ["Crazy", "Cool"],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "IMAGE",
-    question: "Which picture was taken in Ecuardor",
-    score: 30,
-    options: [
-      `https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`,
-      `https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500`,
-    ],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-
-    question: "What's the full meaning of 'UK'?",
-    score: 30,
-    options: [
-      "United Kingdom of UK edehdjhejhd",
-      "Ultra Kingdom of UKE dhjedjedeg",
-    ],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/510px-Flag_of_the_United_Kingdom_%281-2%29.svg.png",
-
-    question: "This is the flag of which country?",
-    score: 30,
-    options: ["UK", "USA"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT_WITH_IMAGE",
-    image:
-      "https://img.freepik.com/free-vector/cute-squirrel-standing-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-premium_138676-6545.jpg?w=2000",
-
-    question: "What animal is this?",
-    score: 30,
-    options: ["Squirell", "Rabbit"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "Which of these is the flag of Nigeria?",
-    score: 30,
-    options: ["🇳🇬🇳🇬🇳🇬", "🇬🇭🇬🇭🇬🇭"],
-    answer: [0],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "TEXT",
-    question: "What does this emoji mean '😎'?",
-    score: 30,
-    options: ["Crazy", "Cool"],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-  {
-    type: "IMAGE",
-    question: "Which picture was taken in Ecuardor",
-    score: 30,
-    options: [
-      `https://images.pexels.com/photos/1024967/pexels-photo-1024967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`,
-      `https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500`,
-    ],
-    answer: [1],
-    whyAnswer: [
-      {
-        heading: "Why the UK Flag differnt",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-      {
-        heading: "What does the UK have in common",
-        text: "The flag of the United Kingdom is a defaced version of the flag of England.",
-      },
-    ],
-  },
-]
+import { questions } from "@/data"
 
 const propsDefinition: IPropDefinitions = {
   mode: {
     type: "string",
-    description: "Spcifies wether to strem question or use static questions",
+    description: "Specifies wether to strem question or use static questions",
     required: true,
     control: "radio",
     options: ["stream", "static"],
@@ -592,22 +122,20 @@ function Home() {
   /**
    * Defines all possible states and their inital value here
    */
-  const [wordCoachProps, setWordCoachProps] = useLocalStorage<IControlsState>(
-    "wordcoachprops",
-    {
-      questions: [] as IQuestions,
-      isLoading: true,
-      enableShuffle: true,
-      revealAnswerOnSkip: true,
-      theme: "nigeria",
-      defaultScore: 10,
-      hasNextRound: true,
-      mode: "static",
-      streamEndpoint: "/api/ai-questions",
-    }
-  )
+  const [wordCoachProps, setWordCoachProps] = useState<IControlsState>({
+    questions: [] as IQuestions,
+    isLoading: true,
+    enableShuffle: true,
+    revealAnswerOnSkip: true,
+    theme: "nigeria",
+    defaultScore: 10,
+    hasNextRound: true,
+    mode: "static",
+    streamEndpoint: "/api/ai-questions",
+  })
 
   const [streamProgress, setStreamProgress] = useState([0, 0])
+  const [isStreamingDone, setIsStreamingDone] = useState(false);
 
   useEffect(() => {
     fetchQuestions()
@@ -618,13 +146,12 @@ function Home() {
 
     setWordCoachProps({
       ...wordCoachProps,
-      questions: questionsDB,
+      questions,
       isLoading: false,
     })
   }
 
   const commonProps = {
-    mode: wordCoachProps.mode,
     theme: wordCoachProps.theme,
     onClickNextRound: fetchQuestions,
     hasNextRound: wordCoachProps.hasNextRound,
@@ -634,24 +161,37 @@ function Home() {
     onSelectAnswer: console.log,
   }
 
-  const streamModeProps = {
+  const streamModeProps: WordCoachProps = {
+    ...commonProps,
+    mode: 'stream',
     streamEndPoint: wordCoachProps.streamEndpoint,
     onChunk: (chunk: any) => {
-      setStreamProgress([chunk.current, chunk.total])
+      if (+chunk.question.questionIndex === 0) {
+        setIsStreamingDone(false)
+      }
+
+      setStreamProgress([chunk.question.questionIndex + 1, chunk.dataLength])
+
+      if ((+chunk.question.questionIndex + 1) === +chunk.dataLength) {
+        setIsStreamingDone(true)
+      }
     },
   }
 
-  const staticModeProps = {
+  const staticModeProps: WordCoachProps = {
+    ...commonProps,
+    mode: 'static',
     isLoading: wordCoachProps.isLoading,
     enableShuffle: false,
     questions: wordCoachProps.questions,
   }
 
+
   const props = {
-    ...commonProps,
     ...(wordCoachProps.mode === "stream" ? streamModeProps : {}),
     ...(wordCoachProps.mode === "static" ? staticModeProps : {}),
   }
+
 
   return (
     <main className="h-screen bg-white flex flex-col font-sans">
@@ -680,7 +220,7 @@ function Home() {
           </header>
           <div className="flex-grow flex justify-center items-center relative">
             <WordCoach {...(props as WordCoachProps)} />
-            {wordCoachProps.mode === "stream" && (
+            {wordCoachProps.mode === "stream" && !isStreamingDone && (
               <div className="absolute bottom-0 right-0 p-4">
                 <div className="p-2 flex gap-1 font-medium items-center text-sm text-gray-600">
                   <svg
@@ -711,7 +251,7 @@ function Home() {
         </div>
         <div className="w-full lg:w-1/3 h-screen text-black lg:border-l shadow flex flex-col">
           <header className="bg-gradient-to-r from-blue-700 to-blue-900 p-5 flex">
-            <div>
+            <div className="flex-1">
               <h1 className="text-xl font-medium text-white">
                 Configure Properties
               </h1>
@@ -720,25 +260,7 @@ function Home() {
               </p>
             </div>
             <div className="ml-auto">
-              <button className="flex flex-col items-center text-white">
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                  </svg>
-                </span>
-                <span className="text-sm">copy code</span>
-              </button>
+              <CopyCode {...(props as WordCoachProps)} />
             </div>
           </header>
 

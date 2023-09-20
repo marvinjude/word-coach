@@ -24,7 +24,11 @@
 
 </p>
 
-Word Coach is simply a replica of the [Google word coach](https://www.seoexpertindelhi.in/google-word-coach/) built in React. You can see the orginal Google Word coach in action by searching "Google Word coach" on Google via **your mobile device**. This project may only be used for learning purposes as the initial idea is from Google.
+Word Coach is simply a replica of the
+[Google word coach](https://www.seoexpertindelhi.in/google-word-coach/) built in
+React. You can see the orginal Google Word coach in action by searching "Google
+Word coach" on Google via **your mobile device**. This project may only be used
+for learning purposes as the initial idea is from Google.
 
 ## Demo
 
@@ -42,68 +46,64 @@ yarn add @word-coah/react
 
 ## Contributing
 
-All contributions are welcome, see [Projects](https://github.com/marvinjude/projects/) to see potential contributions.
-
-To setup this project on your machine
-
-- Fork Repo on your machine
-- install pnpm globally(npm i -g pnpm)
-- install packages (pnpm i)
-- Watch all packages (pnpm watch)
-
-To test the effect of code updates, you can spin up `example/wordcoach.xyz` with `pnpm start`. Any code update you make should reflect accordingly.
+See [Contributing](#contributing)
 
 ## 📝 License
 
-Licensed under the [MIT License](https://github.com/marvinjude/word-coach/license.md)
+Licensed under the
+[MIT License](https://github.com/marvinjude/word-coach/license.md)
 
 ## Todo
 
 ### All
 
-- [ ] Fix Eslint
-
 ### @word-coach/react
 
+<!-- Before relase -->
 - [x] Use streamed data over fake data
 - [x] add onChunk callback
 - [x] Prevent highlight overflow
 - [x] Introduce modes ["stream|static"]
-- [x] Prevent moving or skipping if next chunk hasn't arrived, move to next when data arrives
+- [x] Prevent moving or skipping if next chunk hasn't arrived, move to next when
+      data arrives
 - [x] Cleanup themes - Make sure all themes looks nice
 - [x] Fix EndGameScreen
 - [x] Fetch again on "Next Round" for stream mode
-
+- [x] In stream mode: sometimes the data is fetch but can't proceed to next
+      question
 - [x] Fully wire props with UI
-- [ ] Back state up in localStorage
+- [x] Inject link preload to document to load images ahead of time
+- [ ] ❌ Back state up in localStorage - hydation issues happening
 - [ ] General code cleanup
 - [ ] Write test with playright
 - [ ] TS type for css & svg
 - [ ] Ship to NPM
-- [ ] Compile to web component
 - [ ] Deploy same in-react example to codesandbox(setup pipline for that)
 - [ ] Switch styling solution
 - [ ] Docs
 
+<!-- After relase -->
 ### @word-coach/ai-questions
 
-- [ ] Fix CSV parsing in Library
+<!-- Before relase -->
+- [x] Fix CSV parsing in Library
+- [x] image fetching may messs with order of question index in stream
 - [ ] Write tests
 - [ ] Docs
-- [ ] image fetching may messs with order of question index in stream
 - [ ] Add "why answer"
 
-### wordcoach.xyz
+<!-- After relase -->
 
+### wordcoach.xyz(Not yet released)
 - [x] Build UI for mode and render based on props based on mod
 - [x] Build UI for progress
-
-- [ ] Copy Code Feature
-  - [ ] React
-  - [ ] Web Component
+- [x] Copy Code Feature
 - [ ] Open on CodeSandbox
-- [ ] Block Requests not coming from word-coach-xyz
+- [ ] Block Requests not coming from wordcoach.xyz
 - [ ] Incoporate modes
 - [ ] Show stream progress in stream mode
 - [ ] Debounce stremEndPoint input element
 - [ ] Add Sentry to Catch Errors in Production
+- [ ] Switch to ShadcnUI/Radix UI
+
+<!-- After relase -->

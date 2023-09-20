@@ -1,53 +1,71 @@
 {
   "version": "0.0.0",
   "name": "@word-coach/ai-questions",
-  "umd:name": "TODO",
-  "repository": "TODO_USERNAME/TODO_REPO",
-  "description": "TODO_MODULE_DESCRIPTION",
-  "unpkg": "dist/index.min.js",
-  "module": "dist/index.mjs",
-  "main": "dist/index.js",
-  "types": "types/index.d.ts",
   "license": "MIT",
-  "author": {
-    "name": "TODO_YOUR_NAME",
-    "email": "YOUR_EMAIL@TODO.com",
-    "url": "https://TODO_WEBSITE.com"
+  "repository": {
+    "url": "https://github.com/marvinjude/word-coach",
+    "directory": "packages/ai-questions"
   },
+  "author": "Jude Agboola",
+  "main": "dist/index.js",
+  "module": "dist/ai-questions.esm.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "types"
+    "src"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
-    "./package.json": "./package.json"
+  "keywords": [
+    "AI",
+    "GPT",
+    "Quiz"
+  ],
+  "scripts": {
+    "analyze": "size-limit --why",
+    "build": "dts build",
+    "lint": "dts lint",
+    "prepare": "dts build",
+    "size": "size-limit",
+    "watch": "dts watch",
+    "test": "dts test",
+    "clean": "del-cli dist/*"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "dts lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "peerDependencies": {},
   "engines": {
     "node": ">=12"
   },
-  "scripts": {
-    "watch": "rollup --config rollup.config.js --watch",
-    "build": "rollup -c",
-    "prepublishOnly": "npm run build",
-    "types": "tsc --noEmit",
-    "test": "uvu -r tsm test"
-  },
-  "keywords": [
-    "TODO",
-    "module",
-    "keywords"
+  "size-limit": [
+    {
+      "path": "dist/ai-questions.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/ai-questions.esm.js",
+      "limit": "10 KB"
+    }
   ],
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "13.1.3",
-    "rollup": "2.66.1",
-    "rollup-plugin-terser": "7.0.2",
-    "rollup-plugin-typescript2": "0.27.1",
-    "tsm": "2.2.1",
-    "typescript": "4.5.5",
-    "uvu": "0.5.3"
+    "@size-limit/preset-small-lib": "^11.1.4",
+    "@tsconfig/recommended": "^1.0.7",
+    "dts-cli": "^2.0.5",
+    "husky": "^9.1.5",
+    "size-limit": "^11.1.4",
+    "tslib": "^2.7.0",
+    "typescript": "^5.5.4",
+    "del-cli": "^5.0.0"
   },
   "dependencies": {
     "ai": "^2.1.13",

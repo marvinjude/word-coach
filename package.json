@@ -2,13 +2,27 @@
   "name": "word-coach",
   "private": true,
   "scripts": {
-    "watch": "lerna run watch --no-sort --stream --concurrency 999",
-    "build": "lerna run build --no-sort --stream --concurrency 999",
+    "dev": "lerna run watch,dev --no-sort --stream --concurrency 999",
+    "build:pkgs": "lerna run build --no-sort --stream --concurrency 999 --scope @word-coach/*",
     "clean:node_modules": "lerna clean --yes",
-    "clean:dist": "lerna run clean"
+    "clean:dist": "lerna run clean",
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "format": "prettier --write \"**/*.{ts,js,json}\""
   },
   "devDependencies": {
-    "lerna": "^6.5.1"
+    "@babel/eslint-parser": "^7.16.3",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "8.43.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard-with-typescript": "^36.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "lerna": "^6.5.1",
+    "prettier": "^3.0.3"
   },
   "engines": {
     "node": "^18.0.0"

@@ -1,4 +1,4 @@
-import type { IQuestions } from "word-coach-react"
+import type { IQuestions, WordCoachProps } from '@word-coach/react'
 
 export interface IControlsState {
   questions: IQuestions
@@ -8,7 +8,7 @@ export interface IControlsState {
   theme: string
   defaultScore: number
   hasNextRound: boolean
-  mode: "stream" | "static"
+  mode: 'stream' | 'static'
   streamEndpoint: string
 }
 
@@ -16,7 +16,7 @@ export interface IProDefinition {
   type: string
   description: string
   required: boolean
-  control?: "text" | "switch" | "radio" | "select" | "fetchQ" | "function"
+  control?: 'text' | 'switch' | 'radio' | 'select' | 'fetchQ' | 'function'
   options?: string[]
   showControl: boolean | ((props: IControlsState) => boolean)
   default?: any
@@ -24,6 +24,6 @@ export interface IProDefinition {
   signature?: string
 }
 
-export interface IPropDefinitions {
-  [key: string]: IProDefinition
+export type IPropDefinitions = {
+  [K in keyof WordCoachProps]: IProDefinition
 }

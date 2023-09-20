@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next"
-import { AIQuestions } from "@word-coach/ai-questions"
+import { AIQuestions } from '@/lib/ai-questions'
+import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
   success: boolean
@@ -10,13 +10,13 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse<Data>
 ) {
-  const API_KEY = process.env.OPENAI_SECRET as string
+  const API_KEY = process.env.OPENAI_API_KEY as string
   const questionCount = 10
 
   const aiQuestions = new AIQuestions(API_KEY)
 
   const questionsStream = await aiQuestions.getQuestionsStream({
-    description: "cars",
+    description: 'cars',
     length: questionCount,
   })
 
